@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Atelier
+﻿namespace Atelier.Logic
 {
     public class Database
     {
-        public Database() 
+        public Database()
         {
             connectionString = "DataSource=(localdb)\MSSQLLocalDB; Initial Cataloq = ";
         }
