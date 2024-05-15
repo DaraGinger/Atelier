@@ -1,4 +1,10 @@
-﻿using System.Text;
+﻿using Atelier.Logic;
+using Atelier.Logic.Entities;
+using Atelier.Logic.Models;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +25,21 @@ namespace Atelier
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        DataContext dataContext = new DataContext();
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string query = "SELECT [СlotheId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Сlothes] WHERE [СlotheId] = 1";
+            var result = dataContext.GetSingleRow(query);
+            Cloth cloth = Cloth.FromDataReader(result);
+            result.Close();
+
+            string query2 = "SELECT [СlotheId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Сlothes]";
+            var result2 = dataContext.GetListDataQuery(query2);
+            List<Cloth> cloths = Cloth.ToModelList(result2);
+            result.Close();
         }
     }
 }
