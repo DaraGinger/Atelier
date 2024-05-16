@@ -41,5 +41,27 @@ namespace Atelier
             List<Cloth> cloths = Cloth.ToModelList(result2);
             result.Close();
         }
+
+        private void CatalogButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            ClothCatalog clothCatalog = new ClothCatalog();
+            clothCatalog.Show();
+
+            string query = "SELECT [СlotheId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Сlothes] WHERE [СlotheId] = 1";
+            var result = dataContext.GetSingleRow(query);
+            Cloth cloth = Cloth.FromDataReader(result);
+            result.Close();
+
+            clothCatalog.FillForm(cloth);
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            string query = "SELECT [СlotheId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Сlothes] WHERE [СlotheId] = 1";
+            var result = dataContext.GetSingleRow(query);
+            Cloth cloth = Cloth.FromDataReader(result);
+            result.Close();
+        }
     }
 }

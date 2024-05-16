@@ -28,7 +28,7 @@ namespace Atelier.Logic.Models
                 WorkerId = Convert.ToInt32(reader["СlotheId"]),
                 LastName = Convert.ToString(reader["LastName"]),
                 Name = Convert.ToString(reader["Name"]),
-                SurName = Convert.ToString(reader["Price"]),
+                Surname = Convert.ToString(reader["SurName"]),
                 NumberOfOrders = Convert.ToInt32(reader["NumberOfOrders"]),
             };
         }
