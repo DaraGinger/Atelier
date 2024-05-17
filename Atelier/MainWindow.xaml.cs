@@ -33,7 +33,7 @@ namespace Atelier
         {
             string query = "SELECT [СlotheId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Сlothes] WHERE [СlotheId] = 1";
             var result = dataContext.GetSingleRow(query);
-            Cloth cloth = Cloth.FromDataReader(result);
+            Cloth cloth = Cloth.ToModel(result);
             result.Close();
 
             string query2 = "SELECT [СlotheId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Сlothes]";
@@ -45,22 +45,15 @@ namespace Atelier
         private void CatalogButton_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
-            ClothCatalog clothCatalog = new ClothCatalog();
-            clothCatalog.Show();
-
-            string query = "SELECT [СlotheId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Сlothes] WHERE [СlotheId] = 1";
-            var result = dataContext.GetSingleRow(query);
-            Cloth cloth = Cloth.FromDataReader(result);
-            result.Close();
-
-            clothCatalog.FillForm(cloth);
+            CatalogMenu catalogMenu = new CatalogMenu();
+            catalogMenu.Show();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             string query = "SELECT [СlotheId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Сlothes] WHERE [СlotheId] = 1";
             var result = dataContext.GetSingleRow(query);
-            Cloth cloth = Cloth.FromDataReader(result);
+            Cloth cloth = Cloth.ToModel(result);
             result.Close();
         }
     }

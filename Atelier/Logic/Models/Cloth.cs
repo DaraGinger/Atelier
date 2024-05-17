@@ -18,7 +18,7 @@ namespace Atelier.Logic.Entities
 
         public string ImageSrc { get; set; }
 
-        public static Cloth FromDataReader(SqlDataReader reader)
+        public static Cloth ToModel(SqlDataReader reader)
         {
             reader.Read();
             return new Cloth

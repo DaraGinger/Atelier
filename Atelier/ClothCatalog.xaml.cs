@@ -1,21 +1,10 @@
-﻿using Atelier.Logic;
-using Atelier.Logic.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
-namespace Atelier
+﻿namespace Atelier
 {
+    using Atelier.Logic;
+    using Atelier.Logic.Entities;
+    using System.Windows;
+    using System.Windows.Media;
+
     /// <summary>
     /// Interaction logic for ClothCatalog.xaml
     /// </summary>
@@ -50,7 +39,7 @@ namespace Atelier
             {
                 string query = $"SELECT [СlotheId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Сlothes] WHERE [СlotheId] = {id}";
                 var result = dataContext.GetSingleRow(query);
-                cloth = Cloth.FromDataReader(result);
+                cloth = Cloth.ToModel(result);
                 result.Close();
             }
 
@@ -86,6 +75,13 @@ namespace Atelier
             var cloth = GetCloth(id);
 
             FillForm(cloth);
+        }
+
+        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            CatalogMenu catalogMenu = new CatalogMenu();
+            catalogMenu.Show();
         }
     }
 }

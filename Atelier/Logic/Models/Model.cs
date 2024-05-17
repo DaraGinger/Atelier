@@ -19,5 +19,7 @@
         public double CostWorkOf { get; set; }
 
         public string ImageSrc { get; set; }
+
+
     }
 }
