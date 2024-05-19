@@ -27,7 +27,7 @@ namespace Atelier
             InitializeComponent();
         }
 
-        DataContext dataContext = new DataContext();
+        Database dataContext = new Database();
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -55,6 +55,14 @@ namespace Atelier
             var result = dataContext.GetSingleRow(query);
             Cloth cloth = Cloth.ToModel(result);
             result.Close();
+        }
+
+        private void DebtorsButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+
+            DebtorsForm debtors = new DebtorsForm();
+            debtors.Show();
         }
     }
 }

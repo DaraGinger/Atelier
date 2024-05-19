@@ -3,9 +3,9 @@ using System.Data.SqlClient;
 
 namespace Atelier.Logic
 {
-    public class DataContext
+    public class Database
     {
-        public DataContext()
+        public Database()
         {
             connectionString = "Data Source=(localdb)\\k2024; Initial Catalog=Atelier; Integrated Security=True";
         }

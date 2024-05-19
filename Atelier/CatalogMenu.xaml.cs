@@ -25,10 +25,10 @@ namespace Atelier
         public CatalogMenu()
         {
             InitializeComponent();
-            dataContext = new DataContext();
+            dataContext = new Database();
         }
 
-        DataContext dataContext;
+        Database dataContext;
 
         private void ClothCatalogButton_Click(object sender, RoutedEventArgs e)
         {
@@ -56,6 +56,44 @@ namespace Atelier
             result.Close();
 
             furnitureCatalog.FillForm(furniture);
+        }
+
+        private void ModelCatalogButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            ModelCatalog modelCatalog= new ModelCatalog();
+            modelCatalog.Show();
+
+            Model model = new Model();
+            string query = $" SELECT [ModelId],[Name],[ClothId],[FurnitureId],[Price],[WasteFabric],[NumberFurniture],[CostWork],[ImageSrc] FROM [Atelier].[dbo].[Models] WHERE [ModelId] = 1";
+            var result = dataContext.GetSingleRow(query);
+            model = Model.ToModel(result);
+            result.Close();
+
+            string furnitureQuery = $"SELECT [Name] FROM [Atelier].[dbo].[Furnitures] WHERE [FurnitureId] = {model.FurnitureId}";
+            var furniture = dataContext.GetSingleRow(furnitureQuery);
+
+            if (furniture.Read())
+            {
+                model.FurnitureName = Convert.ToString(furniture["Name"]);
+            }
+
+            string clothQuery = $"SELECT [Name] FROM [Atelier].[dbo].[Сlothes] WHERE [СlotheId] = {model.ClothId}";
+            var cloth = dataContext.GetSingleRow(clothQuery);
+
+            if (cloth.Read())
+            {
+                model.ClothName = Convert.ToString(cloth["Name"]);
+            }
+
+            modelCatalog.FillForm(model);
+        }
+
+        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
         }
     }
 }

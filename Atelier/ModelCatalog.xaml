@@ -1,0 +1,40 @@
+﻿<Window x:Class="Atelier.ModelCatalog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Atelier"
+        mc:Ignorable="d"
+        Title="ModelCatalog" Height="531" Width="902">
+    <Grid Height="531" VerticalAlignment="Top" HorizontalAlignment="Center" Width="902">
+        <Image x:Name="ClothImage" HorizontalAlignment="Left" Height="313" Margin="87,46,0,0" VerticalAlignment="Top" Width="280"/>
+        <Button x:Name="NextButton" Content="Далі" HorizontalAlignment="Left" Height="31" Margin="717,405,0,0" VerticalAlignment="Top" Width="120" Click="NextButton_Click" BorderBrush="#FF7D1D1D" Background="#FF7D1D1D" FontSize="20" FontFamily="Constantia" Foreground="White" FontWeight="Bold"/>
+        <Label x:Name="Id" Content="Id:" HorizontalAlignment="Left" Height="28" Margin="400,84,0,0" VerticalAlignment="Top" Width="46" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="16"/>
+        <Label x:Name="ModelIdLabel" Content="1" HorizontalAlignment="Left" Height="42" Margin="425,84,0,0" VerticalAlignment="Top" Width="38" FontFamily="Constantia" FontWeight="Bold" FontSize="16" Foreground="#FF7D1D1D"/>
+        <Label Content="Price:" HorizontalAlignment="Left" Height="26" Margin="406,328,0,0" VerticalAlignment="Top" Width="80" FontSize="16" FontFamily="Constantia" Foreground="#FF7D1D1D"/>
+        <Label x:Name="ВНаявності" Content="Назва тканини:" HorizontalAlignment="Left" Height="27" Margin="400,119,0,0" VerticalAlignment="Top" Width="124" FontSize="16" FontFamily="Constantia" Foreground="#FF7D1D1D"/>
+        <Label x:Name="Ширина" Content="Витрата тканини:" HorizontalAlignment="Left" Height="28" Margin="400,178,0,0" VerticalAlignment="Top" Width="137" FontSize="16" FontFamily="Constantia" Foreground="#FF7D1D1D"/>
+        <Label x:Name="WasteClothLabel" Content="Label" HorizontalAlignment="Left" Margin="549,176,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.883,0.144" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="16" FontWeight="Bold"/>
+        <Border x:Name="Line_Copy" BorderBrush="#FF7D1D1D" BorderThickness="1" HorizontalAlignment="Left" Height="1" Margin="406,117,0,0" VerticalAlignment="Top" Width="431"/>
+        <Border x:Name="Line2" BorderBrush="#FF7D1D1D" BorderThickness="1" HorizontalAlignment="Left" Height="1" Margin="406,314,0,0" VerticalAlignment="Top" Width="431"/>
+        <Label x:Name="PriceLabel" Content="Label" HorizontalAlignment="Left" Height="46" Margin="400,354,0,0" VerticalAlignment="Top" Width="124" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="24" FontWeight="Bold"/>
+        <TextBlock x:Name="NameTextBlock" HorizontalAlignment="Left" Height="58" Margin="406,46,0,0" TextWrapping="Wrap" Text="Name" VerticalAlignment="Top" Width="317" FontFamily="Constantia" FontSize="24" Foreground="#FF7D1D1D" FontWeight="Bold"/>
+        <Button x:Name="BackButton" Content="Назад" HorizontalAlignment="Left" Height="31" Margin="39,405,0,0" VerticalAlignment="Top" Width="120" Background="#FF7D1D1D" BorderBrush="#FF7D1D1D" FontSize="20" FontFamily="Constantia" FontWeight="Bold" Foreground="White" Click="BackButton_Click"/>
+        <Button x:Name="MenuButton" Content="&lt;=" HorizontalAlignment="Left" Height="26" Margin="19,6,0,0" VerticalAlignment="Top" Width="33" FontFamily="Constantia" FontSize="16" FontWeight="Bold" Foreground="White" Background="#FF7D1D1D" BorderBrush="#FF7D1D1D" Click="MenuButton_Click"/>
+        <TextBlock x:Name="ClotheNameTextBlock" HorizontalAlignment="Left" Height="49" Margin="529,124,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="308" FontSize="16" Foreground="#FF7D1D1D" FontFamily="Constantia" FontWeight="Bold"/>
+        <Label x:Name="Ширина_Copy" Content="Назва фурнітури:" HorizontalAlignment="Left" Height="38" Margin="400,211,0,0" VerticalAlignment="Top" Width="137" FontSize="16" FontFamily="Constantia" Foreground="#FF7D1D1D"/>
+        <TextBlock x:Name="FurnitureNameTextBlock" HorizontalAlignment="Left" Height="40" Margin="542,218,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="295" FontSize="16" Foreground="#FF7D1D1D" FontFamily="Constantia" FontWeight="Bold"/>
+        <Label Content="Кількість фурнітури:" HorizontalAlignment="Left" Height="30" Margin="400,266,0,0" VerticalAlignment="Top" Width="167" RenderTransformOrigin="0.5,0.5" FontSize="16" Foreground="#FF7D1D1D" FontFamily="Constantia">
+            <Label.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.103"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Label.RenderTransform>
+        </Label>
+        <Label x:Name="AmountFurniture" Content="Label" HorizontalAlignment="Left" Height="26" Margin="573,266,0,0" VerticalAlignment="Top" Width="56" FontSize="16" FontFamily="Constantia" Foreground="#FF7D1D1D" FontWeight="Bold"/>
+
+    </Grid>
+</Window>

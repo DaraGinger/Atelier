@@ -25,11 +25,11 @@ namespace Atelier
         public FurnitureCatalog()
         {
             InitializeComponent();
-            dataContext = new DataContext();
+            dataContext = new Database();
             CountMaxId();
         }
 
-        private readonly DataContext dataContext;
+        private readonly Database dataContext;
 
         private int MaxId { get; set; }
 
