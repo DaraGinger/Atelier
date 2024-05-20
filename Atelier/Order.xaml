@@ -1,0 +1,55 @@
+﻿<Window x:Class="Atelier.Order"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Atelier"
+        mc:Ignorable="d"
+        Title="Order" Height="524" Width="811">
+    <Grid Margin="0,0,0,-6">
+        <Label Content="Оформлення замовлення:" HorizontalAlignment="Left" Height="40" Margin="31,50,0,0" VerticalAlignment="Top" Width="279" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="20" FontWeight="Bold"/>
+        <Label Content="Ім'я:" HorizontalAlignment="Left" Height="31" Margin="38,126,0,0" VerticalAlignment="Top" Width="54" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Прізвище:" HorizontalAlignment="Left" Height="34" Margin="38,87,0,0" VerticalAlignment="Top" Width="114" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <Label x:Name="Surname" Content="По-батькові:" HorizontalAlignment="Left" Height="37" Margin="38,162,0,0" VerticalAlignment="Top" Width="128" FontSize="18" FontFamily="Constantia" Foreground="#FF7D1D1D" FontWeight="Bold"/>
+        <Border x:Name="Line" BorderBrush="#FF7D1D1D" BorderThickness="1" HorizontalAlignment="Left" Height="2" Margin="38,285,0,0" VerticalAlignment="Top" Width="316" RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.RenderTransform>
+        </Border>
+        <Label Content="Країна:" HorizontalAlignment="Left" Height="32" Margin="38,294,0,0" VerticalAlignment="Top" Width="88" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Місто:" HorizontalAlignment="Left" Height="32" Margin="38,331,0,0" VerticalAlignment="Top" Width="88" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Вулиця:" HorizontalAlignment="Left" Height="32" Margin="38,368,0,0" VerticalAlignment="Top" Width="88" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Дім:" HorizontalAlignment="Left" Height="32" Margin="38,405,0,0" VerticalAlignment="Top" Width="88" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Квартира:" HorizontalAlignment="Left" Height="32" Margin="38,442,0,0" VerticalAlignment="Top" Width="102" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Email:" HorizontalAlignment="Left" Height="34" Margin="38,243,0,0" VerticalAlignment="Top" Width="70" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Номер &#xD;&#xA;телефону:" HorizontalAlignment="Left" Height="56" Margin="38,196,0,0" VerticalAlignment="Top" Width="110" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <ComboBox x:Name="ClothesComboBox" HorizontalAlignment="Left" Height="32" Margin="516,86,0,0" VerticalAlignment="Top" Width="266"/>
+        <TextBox x:Name="LastNameTextBox" HorizontalAlignment="Left" Height="28" Margin="186,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="168" Foreground="#FF7D1D1D" BorderBrush="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <TextBox x:Name="NameTextBox" HorizontalAlignment="Left" Height="28" Margin="186,129,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="168" Foreground="#FF7D1D1D" BorderBrush="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <TextBox x:Name="SurnameTextBox" HorizontalAlignment="Left" Height="28" Margin="186,166,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="168" Foreground="#FF7D1D1D" BorderBrush="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <TextBox x:Name="CountTextBox" HorizontalAlignment="Left" Height="28" Margin="516,217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="104" Foreground="#FF7D1D1D" BorderBrush="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <TextBox x:Name="EmailTextBox" HorizontalAlignment="Left" Height="28" Margin="186,246,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="168" Foreground="#FF7D1D1D" BorderBrush="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <TextBox x:Name="CountryTextBox" HorizontalAlignment="Left" Height="28" Margin="186,298,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="168" Foreground="#FF7D1D1D" BorderBrush="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <TextBox x:Name="CityTextBox" HorizontalAlignment="Left" Height="28" Margin="186,335,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="168" Foreground="#FF7D1D1D" BorderBrush="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <TextBox x:Name="StreetTextBox" HorizontalAlignment="Left" Height="28" Margin="186,372,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="168" Foreground="#FF7D1D1D" BorderBrush="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <TextBox x:Name="HouseTextBox" HorizontalAlignment="Left" Height="28" Margin="186,409,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="168" Foreground="#FF7D1D1D" BorderBrush="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <TextBox x:Name="FlatNumberTextBox" HorizontalAlignment="Left" Height="28" Margin="186,446,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="168" Foreground="#FF7D1D1D" BorderBrush="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Тканина:" HorizontalAlignment="Left" Height="34" Margin="397,87,0,0" VerticalAlignment="Top" Width="114" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Фурнітура:" HorizontalAlignment="Left" Height="34" Margin="397,129,0,0" VerticalAlignment="Top" Width="114" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Модель:" HorizontalAlignment="Left" Height="34" Margin="397,172,0,0" VerticalAlignment="Top" Width="114" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Кількість:" HorizontalAlignment="Left" Height="34" Margin="397,212,0,0" VerticalAlignment="Top" Width="114" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <Label Content="Робітник:" HorizontalAlignment="Left" Height="34" Margin="397,255,0,0" VerticalAlignment="Top" Width="114" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <ComboBox x:Name="FurnitureComboBox" HorizontalAlignment="Left" Height="31" Margin="516,131,0,0" VerticalAlignment="Top" Width="266"/>
+        <ComboBox x:Name="ModelComboBox" HorizontalAlignment="Left" Height="31" Margin="516,177,0,0" VerticalAlignment="Top" Width="266"/>
+        <ComboBox x:Name="WorkerComboBox" HorizontalAlignment="Left" Height="32" Margin="516,255,0,0" VerticalAlignment="Top" Width="266"/>
+        <TextBox x:Name="PhoneNumberTextBox" HorizontalAlignment="Left" Height="28" Margin="186,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="168" Foreground="#FF7D1D1D" BorderBrush="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
+        <Button x:Name="OrderButton" Content="Зробити замовлення" HorizontalAlignment="Left" Height="37" Margin="609,437,0,0" VerticalAlignment="Top" Width="173" BorderBrush="#FF7D1D1D" Background="#FF7D1D1D" Foreground="White" FontFamily="Constantia" FontWeight="Bold" FontSize="16" Click="OrderButton_Click"/>
+        <Button x:Name="OrderButton_Copy" Content="&lt;=" HorizontalAlignment="Left" Height="37" Margin="23,8,0,0" VerticalAlignment="Top" Width="42" BorderBrush="#FF7D1D1D" Background="#FF7D1D1D" Foreground="White" FontFamily="Constantia" FontWeight="Bold" FontSize="20" Click="OrderButton_Copy_Click"/>
+
+    </Grid>
+</Window>

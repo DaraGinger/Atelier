@@ -64,5 +64,12 @@ namespace Atelier
             DebtorsForm debtors = new DebtorsForm();
             debtors.Show();
         }
+
+        private void OrderButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            Order order = new Order();
+            order.Show();
+        }
     }
 }
