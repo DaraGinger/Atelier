@@ -50,6 +50,18 @@
         <TextBox x:Name="PhoneNumberTextBox" HorizontalAlignment="Left" Height="28" Margin="186,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="168" Foreground="#FF7D1D1D" BorderBrush="#FF7D1D1D" FontFamily="Constantia" FontSize="18" FontWeight="Bold"/>
         <Button x:Name="OrderButton" Content="Зробити замовлення" HorizontalAlignment="Left" Height="37" Margin="609,437,0,0" VerticalAlignment="Top" Width="173" BorderBrush="#FF7D1D1D" Background="#FF7D1D1D" Foreground="White" FontFamily="Constantia" FontWeight="Bold" FontSize="16" Click="OrderButton_Click"/>
         <Button x:Name="OrderButton_Copy" Content="&lt;=" HorizontalAlignment="Left" Height="37" Margin="23,8,0,0" VerticalAlignment="Top" Width="42" BorderBrush="#FF7D1D1D" Background="#FF7D1D1D" Foreground="White" FontFamily="Constantia" FontWeight="Bold" FontSize="20" Click="OrderButton_Copy_Click"/>
+        <Border x:Name="Line_Copy" BorderBrush="#FF7D1D1D" BorderThickness="1" HorizontalAlignment="Left" Height="2" Margin="406,298,0,0" VerticalAlignment="Top" Width="105" RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.RenderTransform>
+        </Border>
+        <Label Content="Ціна:" HorizontalAlignment="Left" Height="25" Margin="406,302,0,0" VerticalAlignment="Top" Width="44" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="10" FontWeight="Bold" RenderTransformOrigin="0.473,0.226"/>
+        <Label x:Name="PriceLabel" Content="0.00 грн" HorizontalAlignment="Left" Height="49" Margin="406,319,0,0" VerticalAlignment="Top" Width="214" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="24" FontWeight="Bold"/>
 
     </Grid>
 </Window>
