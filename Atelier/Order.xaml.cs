@@ -1,43 +1,28 @@
-﻿using Atelier.Logic;
-using Atelier.Logic.Models;
-using Microsoft.VisualBasic;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
-namespace Atelier
+﻿namespace Atelier
 {
+    using Atelier.Logic;
+    using Atelier.Logic.Entities;
+    using Atelier.Logic.Models;
+    using System.Windows;
+
     public partial class Order : Window
     {
-        private List<ComboxModel> Clothes;
         private readonly Database dataContext;
 
         public Order()
         {
             InitializeComponent();
-            Clothes = new List<ComboxModel>();
             dataContext = new Database();
             FillComboBoxes();
         }
 
         private void FillComboBoxes()
         {
-            var clothQuery = $"SELECT [СlotheId],[Name] FROM [dbo].[Сlothes]";
+            var clothQuery = $"SELECT [FabricId],[Name] FROM [dbo].[Fabrics]";
             var result = dataContext.GetListDataQuery(clothQuery);
             while (result.Read())
             {
-                int id = Convert.ToInt32(result["СlotheId"]);
+                int id = Convert.ToInt32(result["FabricId"]);
                 string name = Convert.ToString(result["Name"]);
                
                 ClothesComboBox.Items.Add(id+" "+name);
@@ -123,9 +108,10 @@ namespace Atelier
                 ProductCount = Convert.ToInt32(CountTextBox.Text)
             };
 
-            product.Price = CalculatePrice(product.Clothd, product.FurnitureId, product.ModelId, product.ProductCount);
+            int workerId = Convert.ToInt32(WorkerComboBox.Text.Substring(0, 1));
+            product.Price = CalculatePrice(product.Clothd, product.FurnitureId, product.ModelId, product.ProductCount, workerId);
 
-            var productQuery = $"INSERT INTO [dbo].[Products]([ModelId],[ClothId],[FurnitureId],[Кількість_виробів],[Вартість]) OUTPUT inserted.[ProductId] VALUES({product.ModelId}, {product.Clothd},{product.FurnitureId},{product.ProductCount},{product.Price})";
+            var productQuery = $"INSERT INTO [dbo].[Products]([ModelId],[ClothId],[FurnitureId],[NumberProducts],[Price]) OUTPUT inserted.[ProductId] VALUES({product.ModelId}, {product.Clothd},{product.FurnitureId},{product.ProductCount},{product.Price})";
             reader = dataContext.GetSingleRow(productQuery);
             if (reader.Read())
             {
@@ -133,7 +119,6 @@ namespace Atelier
             }
             reader.Close();
 
-            int workerId = Convert.ToInt32(WorkerComboBox.Text.Substring(0,1));
             DateTime dateTime = DateTime.Now;
             string date = dateTime.ToString("yyyy-MM-dd");
             var clientOrderQuery = $"INSERT INTO [dbo].[ClientOrders] ([ClientId],[ProductId],[WorkerId],[Price],[DateReceivingOrder],[DateFitting],[ExecutionDate],[Payment]) VALUES ({client.ClientID},{product.ProductId},{workerId},{product.Price},'{date}',null,null,{0})";
@@ -145,51 +130,111 @@ namespace Atelier
 
         }
 
-        public double CalculatePrice(int clothId, int furnitureId, int modelId, int productCount)
+        private double CalculatePrice(int fabricId, int furnitureId, int modelId, int productCount, int workerId)
         {
-            var clothQuery = $"SELECT [Price] FROM [dbo].[Сlothes] WHERE [СlotheId]={clothId}";
-            var reader = dataContext.GetSingleRow(clothQuery);
-            double clothPrice = 0;
+            var modelQuery = $"SELECT [Price],[CostWork],[WasteFabric],[NumberFurniture], FROM [dbo].[Models] WHERE [FurnitureId]={modelId}";
+
+            var reader = dataContext.GetSingleRow(modelQuery);
+
+            Model model = new Model();
 
             if (reader.Read())
             {
-                clothPrice = Convert.ToDouble(reader["Price"]);
+                model.Price = Convert.ToDouble(reader["Price"]);
+                model.CostOfWork = Convert.ToDouble(reader["CostWork"]);
+                model.WasteFabric = Convert.ToDouble(reader["WasteFabric"]);
+                model.NumberFurniture = Convert.ToInt32(reader["NumberFurniture"]);
             }
 
             reader.Close();
 
-            var furnitureQuery = $"SELECT [Price] FROM [dbo].[Furnitures] WHERE [FurnitureId]={furnitureId}";
+            var fabricQuery = $"SELECT [Price],[Name],[Amount] FROM [dbo].[Fabric] WHERE [FabricId]={fabricId}";
+
+            reader = dataContext.GetSingleRow(fabricQuery);
+
+            Fabric fabric = new Fabric();
+
+            if (reader.Read())
+            {
+                fabric.FabricId = fabricId;
+                fabric.Price = Convert.ToDouble(reader["Price"]);
+                fabric.Name = Convert.ToString(reader["Name"]);
+                fabric.Amount = Convert.ToDouble(reader["Amount"]);
+            }
+
+            reader.Close();
+
+            UpdateFabric(fabric, model.WasteFabric, workerId);
+
+            var furnitureQuery = $"SELECT [Price],[Name] FROM [dbo].[Furnitures] WHERE [FurnitureId]={furnitureId}";
+
             reader = dataContext.GetSingleRow(furnitureQuery);
-            double furniturePrice = 0;
+
+            Furniture furniture = new Furniture();
 
             if (reader.Read())
             {
-                furniturePrice = Convert.ToDouble(reader["Price"]);
+                furniture.FurnitureId = furnitureId;
+                furniture.Price = Convert.ToDouble(reader["Price"]);
+                furniture.Name = Convert.ToString(reader["Name"]);
+                furniture.Amount = Convert.ToDouble(reader["Amount"]);
             }
 
             reader.Close();
 
-            var modelQuery = $"SELECT [Price],[CostWork],[WasteFabric],[NumberFurniture] FROM [dbo].[Models] WHERE [FurnitureId]={furnitureId}";
+            UpdateFurniture(furniture, model.NumberFurniture, workerId);
 
-            reader = dataContext.GetSingleRow(modelQuery);
-            double modelPrice = 0;
-            double costWork = 0;
-            double wasteFabric = 0;
-            double numberFurniture = 0;
-
-            if (reader.Read())
-            {
-                modelPrice = Convert.ToDouble(reader["Price"]);
-                costWork = Convert.ToDouble(reader["CostWork"]);
-                wasteFabric = Convert.ToDouble(reader["WasteFabric"]);
-                numberFurniture = Convert.ToDouble(reader["NumberFurniture"]);
-            }
-
-            reader.Close();
-
-            double priceOrder = (clothPrice * wasteFabric + furniturePrice * numberFurniture + modelPrice + costWork) * productCount;
+            double priceOrder = (fabric.Price * model.WasteFabric + furniture.Price * model.NumberFurniture + model.Price + model.CostOfWork) * productCount;
 
             return priceOrder;
+        }
+
+        private void UpdateFabric(Fabric fabric, double wasteFabric, int workerId)
+        {
+            int fabricCount = 20;
+            double price = fabric.Price * fabricCount;
+            DateTime dateTime = DateTime.Now;
+            string date = dateTime.ToString("yyyy-MM-dd");
+            string orderSupplier = "";
+
+            if (fabric.Amount == 0 && fabric.Amount < wasteFabric)
+            {
+                orderSupplier = $"INSERT INTO [dbo].[SuplierOrders] ([SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[OrderDate],[ExecutionDate]) VALUES ({1},{workerId},{ProductType.Cloth},'{fabric.Name}',{fabricCount},{price},1,'{date}',null)";
+            }
+            else
+            {
+                orderSupplier = $"UPDATED [dbo].[Fabrics] SET [Amount]={fabric.Amount-wasteFabric} WHERE [FabricId]={fabric.FabricId}";
+            }
+
+            dataContext.ExecuteQuery(orderSupplier);
+
+            UpdateWorker(workerId);
+        }
+
+        private void UpdateFurniture(Furniture furniture, int numberFurniture, int workerId)
+        {
+            int furnitureCount = 30;
+            double price = furniture.Price * numberFurniture;
+            DateTime dateTime = DateTime.Now;
+            string date = dateTime.ToString("yyyy-MM-dd");
+            string orderSupplier = "";
+
+            if (furniture.Amount == 0 && furniture.Amount < numberFurniture)
+            {
+                orderSupplier = $"INSERT INTO [dbo].[SuplierOrders] ([SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[OrderDate],[ExecutionDate]) VALUES ({1},{workerId},{ProductType.Furniture},'{furniture.Name}',{numberFurniture},{price},1,'{date}',null)";
+            }
+            else
+            {
+                orderSupplier = $"UPDATED [dbo].[Furniture] SET [Amount]={furniture.Amount - numberFurniture} WHERE [FurnitureId]={furniture.FurnitureId}";
+            }
+
+            dataContext.ExecuteQuery(orderSupplier);
+        }
+
+        private void UpdateWorker(int workerId)
+        {
+            string workerQuery = $"UPDATE [dbo].[Workers] SET [NumberOrders]+=1 WHERE [WorkerId]={workerId} AND [WorkerId]>0";
+            dataContext.ExecuteQuery(workerQuery);
         }
     }
 }

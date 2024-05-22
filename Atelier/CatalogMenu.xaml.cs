@@ -36,9 +36,9 @@ namespace Atelier
             ClothCatalog clothCatalog = new ClothCatalog();
             clothCatalog.Show();
 
-            string query = "SELECT [СlotheId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Сlothes] WHERE [СlotheId] = 1";
+            string query = "SELECT [FabricId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Fabrics] WHERE [FabricId] = 1";
             var result = dataContext.GetSingleRow(query);
-            Cloth cloth = Cloth.ToModel(result);
+            Fabric cloth = Fabric.ToModel(result);
             result.Close();
 
             clothCatalog.FillForm(cloth);
@@ -65,7 +65,7 @@ namespace Atelier
             modelCatalog.Show();
 
             Model model = new Model();
-            string query = $" SELECT [ModelId],[Name],[ClothId],[FurnitureId],[Price],[WasteFabric],[NumberFurniture],[CostWork],[ImageSrc] FROM [Atelier].[dbo].[Models] WHERE [ModelId] = 1";
+            string query = $" SELECT [ModelId],[Name],[FabricId],[FurnitureId],[Price],[WasteFabric],[NumberFurniture],[CostWork],[ImageSrc] FROM [Atelier].[dbo].[Models] WHERE [ModelId] = 1";
             var result = dataContext.GetSingleRow(query);
             model = Model.ToModel(result);
             result.Close();
@@ -78,12 +78,12 @@ namespace Atelier
                 model.FurnitureName = Convert.ToString(furniture["Name"]);
             }
 
-            string clothQuery = $"SELECT [Name] FROM [Atelier].[dbo].[Сlothes] WHERE [СlotheId] = {model.ClothId}";
+            string clothQuery = $"SELECT [Name] FROM [Atelier].[dbo].[Fabrics] WHERE [FabricId] = {model.FabricId}";
             var cloth = dataContext.GetSingleRow(clothQuery);
 
             if (cloth.Read())
             {
-                model.ClothName = Convert.ToString(cloth["Name"]);
+                model.FabricName = Convert.ToString(cloth["Name"]);
             }
 
             modelCatalog.FillForm(model);

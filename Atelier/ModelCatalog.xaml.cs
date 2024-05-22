@@ -37,7 +37,7 @@
 
             if (id <= MaxId && id > 0)
             {
-                string query = $"SELECT [ModelId],[Name],[ClothId],[FurnitureId],[Price],[WasteFabric],[NumberFurniture],[CostWork],[ImageSrc] FROM [Atelier].[dbo].[Models] WHERE [ModelId] = {id}";
+                string query = $"SELECT [ModelId],[Name],[FabricId],[FurnitureId],[Price],[WasteFabric],[NumberFurniture],[CostWork],[ImageSrc] FROM [Atelier].[dbo].[Models] WHERE [ModelId] = {id}";
                 var result = dataContext.GetSingleRow(query);
                 model = Model.ToModel(result);
                 result.Close();
@@ -50,12 +50,12 @@
                     model.FurnitureName = Convert.ToString(furniture["Name"]);
                 }
 
-                string clothQuery = $"SELECT [Name] FROM [Atelier].[dbo].[Сlothes] WHERE [СlotheId] = {model.ClothId}";
+                string clothQuery = $"SELECT [Name] FROM [Atelier].[dbo].[Fabrics] WHERE [FabricId] = {model.FabricId}";
                 var cloth = dataContext.GetSingleRow(clothQuery);
 
                 if (cloth.Read())
                 {
-                    model.ClothName = Convert.ToString(cloth["Name"]);
+                    model.FabricName = Convert.ToString(cloth["Name"]);
                 }
 
                 FillForm(model);
@@ -70,11 +70,12 @@
             {
                 NameTextBlock.Text = model.Name;
                 ModelIdLabel.Content = model.ModelId;
-                ClotheNameTextBlock.Text = model.ClothName;
+                ClotheNameTextBlock.Text = model.FabricName;
                 WasteClothLabel.Content = model.WasteFabric;
                 FurnitureNameTextBlock.Text = model.FurnitureName;
-                PriceLabel.Content = model.Price + " грн/шт";
+                PriceLabel.Content = model.Price + " грн";
                 ClothImage.Source = (ImageSource)new ImageSourceConverter().ConvertFromString(model.ImageSrc);
+                NumberFurnitureLabel.Content = model.NumberFurniture;
             }
         }
 

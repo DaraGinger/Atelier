@@ -23,7 +23,7 @@
 
         private void CountMaxId()
         {
-            string query = "SELECT MAX ([СlotheId]) FROM [dbo].[Сlothes]";
+            string query = "SELECT MAX ([FabricId]) FROM [dbo].[Fabrics]";
             var result = dataContext.GetSingleRow(query);
             if (result.Read())
             {
@@ -31,27 +31,27 @@
             }
         }
 
-        private Cloth GetCloth(int id)
+        private Fabric GetCloth(int id)
         {
-            Cloth cloth = new Cloth();
+            Fabric cloth = new Fabric();
 
             if (id <= MaxId && id > 0)
             {
-                string query = $"SELECT [СlotheId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Сlothes] WHERE [СlotheId] = {id}";
+                string query = $"SELECT [FabricId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Fabrics] WHERE [FabricId] = {id}";
                 var result = dataContext.GetSingleRow(query);
-                cloth = Cloth.ToModel(result);
+                cloth = Fabric.ToModel(result);
                 result.Close();
             }
 
             return cloth;
         }
 
-        public void FillForm(Cloth cloth)
+        public void FillForm(Fabric cloth)
         {
-            if (cloth.ClothId > 0)
+            if (cloth.FabricId > 0)
             {
                 NameTextBlock.Text = cloth.Name;
-                ClothIdLabel.Content = cloth.ClothId;
+                ClothIdLabel.Content = cloth.FabricId;
                 AmountLabel.Content = cloth.Amount+" м";
                 WidthLabel.Content = cloth.Width+" м";
                 PriceLabel.Content = cloth.Price+" грн/м";

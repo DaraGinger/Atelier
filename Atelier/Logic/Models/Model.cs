@@ -9,9 +9,9 @@ namespace Atelier.Logic.Models
 
         public string Name { get; set; }
 
-        public int ClothId { get; set; }
+        public int FabricId { get; set; }
 
-        public string ClothName { get; set; }
+        public string FabricName { get; set; }
 
         public int FurnitureId { get; set; }
 
@@ -34,11 +34,11 @@ namespace Atelier.Logic.Models
             {
                 ModelId = Convert.ToInt32(reader["ModelId"]),
                 Name = Convert.ToString(reader["Name"]),
-                ClothId = Convert.ToInt32(reader["ClothId"]),
+                FabricId = Convert.ToInt32(reader["FabricId"]),
                 FurnitureId = Convert.ToInt32(reader["FurnitureId"]),
                 Price = Convert.ToDouble(reader["Price"]),
                 WasteFabric = Convert.ToDouble(reader["WasteFabric"]),
-                NumberFurniture = Convert.ToInt32(reader["WasteFabric"]),
+                NumberFurniture = Convert.ToInt32(reader["NumberFurniture"]),
                 CostOfWork = Convert.ToDouble(reader["CostWork"]),
                 ImageSrc = Convert.ToString(reader["ImageSrc"])
             };
@@ -53,7 +53,7 @@ namespace Atelier.Logic.Models
                 Model model = new Model();
                 model.ModelId = Convert.ToInt32(reader["ModelId"]);
                 model.Name = Convert.ToString(reader["Name"]);
-                model.ClothId = Convert.ToInt32(reader["СlotheId"]);
+                model.FabricId = Convert.ToInt32(reader["FabricId"]);
                 model.FurnitureId = Convert.ToInt32(reader["FurnitureId"]);
                 model.Price = Convert.ToDouble(reader["Price"]);
                 model.WasteFabric = Convert.ToDouble(reader["WasteFabric"]);

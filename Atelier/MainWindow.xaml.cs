@@ -33,12 +33,12 @@ namespace Atelier
         {
             string query = "SELECT [СlotheId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Сlothes] WHERE [СlotheId] = 1";
             var result = dataContext.GetSingleRow(query);
-            Cloth cloth = Cloth.ToModel(result);
+            Fabric cloth = Fabric.ToModel(result);
             result.Close();
 
             string query2 = "SELECT [СlotheId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Сlothes]";
             var result2 = dataContext.GetListDataQuery(query2);
-            List<Cloth> cloths = Cloth.ToModelList(result2);
+            List<Fabric> cloths = Fabric.ToModelList(result2);
             result.Close();
         }
 
@@ -53,7 +53,7 @@ namespace Atelier
         {
             string query = "SELECT [СlotheId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Сlothes] WHERE [СlotheId] = 1";
             var result = dataContext.GetSingleRow(query);
-            Cloth cloth = Cloth.ToModel(result);
+            Fabric cloth = Fabric.ToModel(result);
             result.Close();
         }
 

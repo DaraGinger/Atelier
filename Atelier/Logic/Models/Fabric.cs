@@ -4,9 +4,9 @@ using System.Data.SqlClient;
 
 namespace Atelier.Logic.Entities
 {
-    public class Cloth
+    public class Fabric
     {
-        public int ClothId { get; set; }
+        public int FabricId { get; set; }
 
         public string Name { get; set; }
 
@@ -18,12 +18,12 @@ namespace Atelier.Logic.Entities
 
         public string ImageSrc { get; set; }
 
-        public static Cloth ToModel(SqlDataReader reader)
+        public static Fabric ToModel(SqlDataReader reader)
         {
             reader.Read();
-            return new Cloth
+            return new Fabric
             {
-                ClothId = Convert.ToInt32(reader["СlotheId"]),
+                FabricId = Convert.ToInt32(reader["FabricId"]),
                 Name = Convert.ToString(reader["Name"]),
                 Width = Convert.ToDouble(reader["Width"]),
                 Price = Convert.ToDouble(reader["Price"]),
@@ -32,14 +32,14 @@ namespace Atelier.Logic.Entities
             };
         }
 
-        public static List<Cloth> ToModelList(SqlDataReader sqlDataReader)
+        public static List<Fabric> ToModelList(SqlDataReader sqlDataReader)
         {
-            List<Cloth> list = new List<Cloth>();
+            List<Fabric> list = new List<Fabric>();
 
             while (sqlDataReader.Read())
             {
-                Cloth cloth = new Cloth();
-                cloth.ClothId = Convert.ToInt32(sqlDataReader["СlotheId"]);
+                Fabric cloth = new Fabric();
+                cloth.FabricId = Convert.ToInt32(sqlDataReader["FabricId"]);
                 cloth.Name = Convert.ToString(sqlDataReader["Name"]);
                 cloth.Width = Convert.ToDouble(sqlDataReader["Width"]);
                 cloth.Width = Convert.ToDouble(sqlDataReader["Width"]);
