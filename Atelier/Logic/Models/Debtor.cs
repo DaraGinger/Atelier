@@ -4,8 +4,6 @@
     {
         public string Name { get; set; }
 
-        public int ClientId { get; set; }
-
         public int ClientOrderId { get; set; }
 
         public double Price { get; set; }
@@ -16,9 +14,8 @@
         {
             Debtor debtor = new Debtor
             {
-                ClientId = clientOrder.ClientId,
                 ClientOrderId = clientOrder.ClientOrderId,
-                Name = $"{clientOrder.Client.Surname} {clientOrder.Client.Name} {clientOrder.Client.LastName}",
+                Name = $"{clientOrder.Surname} {clientOrder.Name} {clientOrder.LastName}",
                 Price = clientOrder.Price,
                 Payment = clientOrder.Payment,
             };

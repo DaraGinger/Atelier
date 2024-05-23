@@ -8,6 +8,8 @@ namespace Atelier.Logic.Entities
     {
         public int FabricId { get; set; }
 
+        public int SupplierId { get; set; }
+
         public string Name { get; set; }
 
         public double Width { get; set; }
@@ -24,6 +26,7 @@ namespace Atelier.Logic.Entities
             return new Fabric
             {
                 FabricId = Convert.ToInt32(reader["FabricId"]),
+                SupplierId = Convert.ToInt32(reader["SupplierId"]),
                 Name = Convert.ToString(reader["Name"]),
                 Width = Convert.ToDouble(reader["Width"]),
                 Price = Convert.ToDouble(reader["Price"]),
@@ -40,6 +43,7 @@ namespace Atelier.Logic.Entities
             {
                 Fabric cloth = new Fabric();
                 cloth.FabricId = Convert.ToInt32(sqlDataReader["FabricId"]);
+                cloth.SupplierId = Convert.ToInt32(sqlDataReader["SupplierId"]);
                 cloth.Name = Convert.ToString(sqlDataReader["Name"]);
                 cloth.Width = Convert.ToDouble(sqlDataReader["Width"]);
                 cloth.Width = Convert.ToDouble(sqlDataReader["Width"]);

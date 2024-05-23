@@ -8,7 +8,7 @@
 
         public int FurnitureId { get; set; }
 
-        public int Clothd { get; set; }
+        public int FabricId { get; set; }
 
         public int ProductCount { get; set; }
 

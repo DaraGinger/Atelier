@@ -1,32 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-
-namespace Atelier
+﻿namespace Atelier
 {
+    using Atelier.Logic.Models;
+    using System.Collections.ObjectModel;
+    using System.Windows;
     /// <summary>
     /// Interaction logic for ListOrders.xaml
     /// </summary>
     public partial class ListOrders : Window
     {
+        public ObservableCollection<ClientOrderHelper> Orders { get; set; }
+
         public ListOrders()
         {
             InitializeComponent();
+            Orders = new ObservableCollection<ClientOrderHelper>();
         }
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
-
+            this.Hide();
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
         }
     }
 }

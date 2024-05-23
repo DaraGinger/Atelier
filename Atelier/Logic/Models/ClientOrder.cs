@@ -6,7 +6,11 @@ namespace Atelier.Logic.Models
     {
         public int ClientOrderId { get; set; }
 
-        public int ClientId { get; set; }
+        public string LastName { get; set; }
+
+        public string Name { get; set; }
+
+        public string Surname { get; set; }
 
         public int ProductId { get; set; }
 
@@ -22,15 +26,15 @@ namespace Atelier.Logic.Models
 
         public bool Payment {  get; set; }
 
-        public Client Client {  get; set; }
-
         public static ClientOrder ToModel(SqlDataReader reader)
         {
             reader.Read();
             return new ClientOrder
             {
                 ClientOrderId = Convert.ToInt32(reader["ClientOrderId"]),
-                ClientId = Convert.ToInt32(reader["ClientId"]),
+                Name = Convert.ToString(reader["Name"]),
+                Surname = Convert.ToString(reader["Surname"]),
+                LastName = Convert.ToString(reader["LastName"]),
                 ProductId = Convert.ToInt32(reader["ProductId"]),
                 WorkerId = Convert.ToInt32(reader["WorkerId"]),
                 Price = Convert.ToDouble(reader["Price"]),
@@ -49,10 +53,11 @@ namespace Atelier.Logic.Models
             {
                 ClientOrder clientOrder = new ClientOrder();
                 clientOrder.ClientOrderId = Convert.ToInt32(reader["ClientOrderId"]);
-                clientOrder.ClientId = Convert.ToInt32(reader["ClientId"]);
+                clientOrder.Name = Convert.ToString(reader["Name"]);
+                clientOrder.Surname = Convert.ToString(reader["Surname"]);
+                clientOrder.LastName = Convert.ToString(reader["LastName"]);
                 clientOrder.Price = Convert.ToDouble(reader["Price"]);
                 clientOrder.Payment = Convert.ToBoolean(reader["Payment"]);
-                clientOrder.Client = new Client();
                 list.Add(clientOrder);
             }
 
@@ -67,7 +72,6 @@ namespace Atelier.Logic.Models
             {
                 ClientOrder clientOrder = new ClientOrder();
                 clientOrder.ClientOrderId = Convert.ToInt32(reader["ClientOrderId"]);
-                clientOrder.ClientId = Convert.ToInt32(reader["ClientId"]);
                 clientOrder.ProductId = Convert.ToInt32(reader["ProductId"]);
                 clientOrder.WorkerId = Convert.ToInt32(reader["WorkerId"]);
                 clientOrder.Price = Convert.ToDouble(reader["Price"]);

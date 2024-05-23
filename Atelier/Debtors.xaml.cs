@@ -25,7 +25,7 @@
 
         private void FillDataGrid()
         {
-            var orderQuery = "SELECT [ClientOrderId],[Payment],[ClientId],[Price] FROM [Atelier].[dbo].[ClientOrders] WHERE [Payment] = 0";
+            var orderQuery = "SELECT [ClientOrderId],[Payment],[LastName],[Name],[Surname],[Price] FROM [Atelier].[dbo].[ClientOrders] WHERE [Payment] = 0";
 
             var clientOrdersReader = dataContext.GetListDataQuery(orderQuery);
             List<ClientOrder> clientOrders = ClientOrder.ToDebtersList(clientOrdersReader);
@@ -33,18 +33,6 @@
 
             foreach(var clientOrder in  clientOrders)
             {
-                var clientQuery = $"SELECT [Name],[Surname],[LastName] FROM [Atelier].[dbo].[Clients] WHERE [ClientId]={clientOrder.ClientId}";
-                var clientOrderReader = dataContext.GetSingleRow(clientQuery);
-
-                if (clientOrderReader.Read())
-                {
-                    clientOrder.Client.Name = Convert.ToString(clientOrderReader["Name"]);
-                    clientOrder.Client.Surname = Convert.ToString(clientOrderReader["Surname"]);
-                    clientOrder.Client.LastName = Convert.ToString(clientOrderReader["LastName"]);
-                }
-
-                clientOrderReader.Close();
-
                 Debtor debtor = Debtor.ToModel(clientOrder);
                 Debtors.Add(debtor);
             }
