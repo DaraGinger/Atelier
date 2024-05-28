@@ -61,6 +61,13 @@ namespace Atelier.Logic.Repositories
             context.ExecuteQuery(orderSupplierQuery);
         }
 
+        public void RemoveFabricAmount(double amount, int fabricId)
+        {
+            string orderSupplierQuery = $"UPDATE [dbo].[Fabrics] SET [Amount]-={amount.ToString().Replace(',', '.')} WHERE [FabricId]={fabricId}";
+
+            context.ExecuteQuery(orderSupplierQuery);
+        }
+
         public Fabric GetFabricByName(string fabricName)
         {
             string query = $"SELECT [FabricId],[SupplierId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Fabrics] WHERE [Name]='{fabricName}'";

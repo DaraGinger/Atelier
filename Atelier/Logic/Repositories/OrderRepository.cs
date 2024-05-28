@@ -44,7 +44,9 @@ namespace Atelier.Logic.Repositories
             string date = supplierOrder.OrderDate.ToString("yyyy-MM-dd");
             string price = supplierOrder.Price.ToString().Replace(',', '.');
 
-            string orderSupplierQuery = $"INSERT INTO [dbo].[SuplierOrders] ([SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[OrderDate],[ExecutionDate]) VALUES ({supplierOrder.SupplierId},{supplierOrder.WorkerId},{supplierOrder.ProductType},'{supplierOrder.ProductName}',{supplierOrder.Amount},{price},1,'{date}',null)";
+            string orderSupplierQuery = $"INSERT INTO [dbo].[SupplierOrders] ([SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[OrderDate],[ExecutionDate]) VALUES ({supplierOrder.SupplierId},{supplierOrder.WorkerId},{(int)supplierOrder.ProductType},'{supplierOrder.ProductName}',{supplierOrder.Amount},{price},1,'{date}',null)";
+        
+            context.ExecuteQuery(orderSupplierQuery);
         }
 
         public List<ClientOrderHelper> GetOrders()
@@ -67,6 +69,7 @@ namespace Atelier.Logic.Repositories
                 ClientOrderHelper clientOrder = new ClientOrderHelper
                 {
                     ClientOrderId = order.ClientOrderId,
+                    ProductId = order.ProductId,
                     ClientName = order.LastName + " " + order.Name + " " + order.Surname,
                     WorkerName = worker.LastName + " " + worker.Name + " " + worker.Surname,
                     DateReceivingOrder = order.DateReceivingOrder,
@@ -132,7 +135,7 @@ namespace Atelier.Logic.Repositories
                 string supplierQuery = $"SELECT [SupplierId],[CompanyName] FROM [dbo].[Suppliers] WHERE [SupplierId]={order.SupplierId}";
                 Supplier supplier = Supplier.ToModel(supplierQuery, context);
 
-                DateTime date = (DateTime)order.ExecutionDate;
+                DateTime executionDate = order.ExecutionDate != null ? (DateTime)order.ExecutionDate : DateTime.MinValue;
 
                 SupplierOrderHelper supplierOrder = new SupplierOrderHelper
                 {
@@ -141,7 +144,7 @@ namespace Atelier.Logic.Repositories
                     ProductName = order.ProductName,
                     WorkerName = worker.LastName + " " + worker.Name + " " + worker.Surname,
                     OrderDate = order.OrderDate,
-                    ExecutionDate = date.ToString("yyyy-MM-dd"),
+                    ExecutionDate = executionDate.ToString("yyyy-MM-dd") != DateTime.MinValue.ToString("yyyy-MM-dd") ? executionDate.ToString("yyyy-MM-dd") : null,
                     Price = order.Price,
                     Amount = order.Amount,
                     ProductType = order.ProductType,

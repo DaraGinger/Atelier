@@ -77,9 +77,9 @@
 
             Product product = new Product
             {
-                FabricId = Convert.ToInt32(ClothesComboBox.Text.Substring(0, 1)),
-                FurnitureId = FurnitureComboBox.Text == "" ? 0 : Convert.ToInt32(FurnitureComboBox.Text.Substring(0, 1)),
-                ModelId = Convert.ToInt32(ModelComboBox.Text.Substring(0, 1)),
+                FabricId = Convert.ToInt32(ClothesComboBox.Text.Substring(0, 2).Trim()),
+                FurnitureId = FurnitureComboBox.Text == "" ? 0 : Convert.ToInt32(FurnitureComboBox.Text.Substring(0, 2).Trim()),
+                ModelId = Convert.ToInt32(ModelComboBox.Text.Substring(0, 2).Trim()),
                 NumberProducts = Convert.ToInt32(CountTextBox.Text)
             };
 
@@ -108,7 +108,7 @@
 
         private void UpdateFabric(Fabric fabric, double wasteFabric, int workerId)
         {
-            if (fabric.Amount == 0 && fabric.Amount < wasteFabric)
+            if (fabric.Amount == 0 || fabric.Amount < wasteFabric)
             {
                 int fabricCount = 20;
 
@@ -117,7 +117,7 @@
                     SupplierId = fabric.SupplierId,
                     ProductName = fabric.Name,
                     ProductType = ProductType.Fabric,
-                    Amount = wasteFabric,
+                    Amount = fabricCount,
                     Price = fabricCount * fabric.Price,
                     WorkerId = workerId,
                     OrderDate = DateTime.Now
@@ -134,7 +134,7 @@
 
         private void UpdateFurniture(Furniture furniture, int numberFurniture, int workerId)
         {
-            if (furniture.Amount == 0 && furniture.Amount < numberFurniture)
+            if (furniture.Amount == 0 || furniture.Amount < numberFurniture)
             {
                 int fabricCount = 30;
 
@@ -143,7 +143,7 @@
                     SupplierId = furniture.SupplierId,
                     ProductName = furniture.Name,
                     ProductType = ProductType.Furniture,
-                    Amount = numberFurniture,
+                    Amount = fabricCount,
                     Price = fabricCount * furniture.Price,
                     WorkerId = workerId,
                     OrderDate = DateTime.Now

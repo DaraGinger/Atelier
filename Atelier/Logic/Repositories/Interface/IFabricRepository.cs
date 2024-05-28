@@ -12,6 +12,8 @@ namespace Atelier.Logic.Repositories.Interface
 
         void UpdateFabricAmount(double amount, int fabricId);
 
+        void RemoveFabricAmount(double amount, int fabricId);
+
         Fabric GetFabricByName(string fabricName);
     }
 }

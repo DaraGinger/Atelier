@@ -4,13 +4,9 @@
     {
         public int ClientOrderId { get; set; }
 
+        public int ProductId { get; set; }
+
         public string ClientName { get; set; }
-
-        public string FabricName { get; set; }
-
-        public string FurnitureName { get; set; }
-
-        public string ModelName { get; set; }
 
         public string WorkerName { get; set; }
 

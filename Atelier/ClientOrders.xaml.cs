@@ -6,6 +6,8 @@
     using System;
     using System.Collections.ObjectModel;
     using System.Windows;
+    using System.Windows.Controls;
+
     /// <summary>
     /// Interaction logic for ListOrders.xaml
     /// </summary>
@@ -15,11 +17,20 @@
 
         private readonly IOrderRepository orderRepository;
 
+        private readonly IFabricRepository fabricRepository;
+
+        private readonly IFurnitureRepository furnitureRepository;
+
+        private readonly IModelRepository modelRepository;
+
         public ClientOrders()
         {
             InitializeComponent();
             ClientOrdersList = new ObservableCollection<ClientOrderHelper>();
             orderRepository = new OrderRepository();
+            fabricRepository = new FabricRepository();
+            furnitureRepository = new FurnitureRepository();
+            modelRepository = new ModelRepository();
             FillDataGrid();
         }
 
@@ -71,6 +82,7 @@
         }
 
         private void ExecutionDate_TextChanged(object sender, EventArgs e)
+        
         {
             var clientOrder = OrdersDataGrid.SelectedItem as ClientOrderHelper;
 
@@ -83,6 +95,19 @@
             DateTime date = Convert.ToDateTime(clientOrder.ExecutionDate);
 
             orderRepository.UpdateExecutionDate(clientOrder.ClientOrderId, date.ToString("yyyy-MM-dd"));
+
+            var product = orderRepository.GetProductById(clientOrder.ProductId);
+
+            var model = modelRepository.GetModelById(product.ModelId);
+
+            var fabric = fabricRepository.GetFabricById(product.FabricId);
+            fabric.Amount -= model.WasteFabric*product.NumberProducts;
+            fabricRepository.UpdateFabricAmount(fabric.Amount, fabric.FabricId);
+
+            var furniture = furnitureRepository.GetFurnitureById(product.FurnitureId);
+            furniture.Amount -= model.NumberFurniture*product.NumberProducts;
+            furnitureRepository.UpdateFurnitureAmount(furniture.Amount, furniture.FurnitureId);
+
         }
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)
