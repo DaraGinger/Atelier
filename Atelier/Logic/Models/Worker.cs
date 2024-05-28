@@ -1,12 +1,4 @@
-﻿using Atelier.Logic.Entities;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Atelier.Logic.Models
+﻿namespace Atelier.Logic.Models
 {
     public class Worker
     {
@@ -20,17 +12,24 @@ namespace Atelier.Logic.Models
 
         public int NumberOfOrders { get; set;}
 
-        public static Worker FromDataReader(SqlDataReader reader)
+        public static Worker ToModel(string query, Database database)
         {
+            var reader = database.GetSingleRow(query);
+
             reader.Read();
-            return new Worker
+
+            Worker worker = new Worker
             {
-                WorkerId = Convert.ToInt32(reader["СlotheId"]),
+                WorkerId = Convert.ToInt32(reader["WorkerId"]),
                 LastName = Convert.ToString(reader["LastName"]),
                 Name = Convert.ToString(reader["Name"]),
                 Surname = Convert.ToString(reader["SurName"]),
-                NumberOfOrders = Convert.ToInt32(reader["NumberOfOrders"]),
+                NumberOfOrders = Convert.ToInt32(reader["NumberOrders"]),
             };
+
+            reader.Close();
+
+            return worker;
         }
     }
 }

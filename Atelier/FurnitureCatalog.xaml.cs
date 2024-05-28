@@ -1,19 +1,8 @@
-﻿using Atelier.Logic.Entities;
-using Atelier.Logic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
+﻿using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Atelier.Logic.Models;
+using Atelier.Logic.Repositories.Interface;
+using Atelier.Logic.Repositories;
 
 namespace Atelier
 {
@@ -22,40 +11,31 @@ namespace Atelier
     /// </summary>
     public partial class FurnitureCatalog : Window
     {
+        private readonly IFurnitureRepository furnitureRepository;
         public FurnitureCatalog()
         {
             InitializeComponent();
-            dataContext = new Database();
+            furnitureRepository = new FurnitureRepository();
             CountMaxId();
         }
-
-        private readonly Database dataContext;
 
         private int MaxId { get; set; }
 
         private void CountMaxId()
         {
-            string query = "SELECT MAX ([FurnitureId]) FROM [dbo].[Furnitures]";
-            var result = dataContext.GetSingleRow(query);
-            if (result.Read())
-            {
-                MaxId = Convert.ToInt32(result[0]);
-            }
+            MaxId = furnitureRepository.GetMaxFurnitureId();
         }
 
-        private Furniture GetFurniture(int id)
+        public Furniture GetFurniture(int id)
         {
-            Furniture cloth = new Furniture();
+            Furniture furniture = new Furniture();
 
             if (id <= MaxId && id > 0)
             {
-                string query = $"SELECT [FurnitureId],[Name],[Material],[Amount],[Price],[ImageSrc] FROM [Atelier].[dbo].[Furnitures] WHERE [FurnitureId] = {id}";
-                var result = dataContext.GetSingleRow(query);
-                cloth = Furniture.ToModel(result);
-                result.Close();
+                furniture = furnitureRepository.GetFurnitureById(id);
             }
 
-            return cloth;
+            return furniture;
         }
 
         public void FillForm(Furniture furniture)

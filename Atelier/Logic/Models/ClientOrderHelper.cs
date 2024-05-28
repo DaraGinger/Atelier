@@ -18,9 +18,9 @@
 
         public DateTime DateReceivingOrder { get; set; }
 
-        public DateTime DateFitting { get; set; }
+        public string DateFitting { get; set; }
 
-        public DateTime ExecutionDate { get; set; }
+        public string ExecutionDate { get; set; }
 
         public bool Payment { get; set; }
     }

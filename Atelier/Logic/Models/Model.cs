@@ -1,7 +1,4 @@
-﻿using Atelier.Logic.Entities;
-using System.Data.SqlClient;
-
-namespace Atelier.Logic.Models
+﻿namespace Atelier.Logic.Models
 {
     public class Model
     {
@@ -27,43 +24,28 @@ namespace Atelier.Logic.Models
 
         public string ImageSrc { get; set; }
 
-        public static Model ToModel(SqlDataReader reader)
+        public static Model ToModel(string query, Database database)
         {
-            reader.Read();
-            return new Model
-            {
-                ModelId = Convert.ToInt32(reader["ModelId"]),
-                Name = Convert.ToString(reader["Name"]),
-                FabricId = Convert.ToInt32(reader["FabricId"]),
-                FurnitureId = Convert.ToInt32(reader["FurnitureId"]),
-                Price = Convert.ToDouble(reader["Price"]),
-                WasteFabric = Convert.ToDouble(reader["WasteFabric"]),
-                NumberFurniture = Convert.ToInt32(reader["NumberFurniture"]),
-                CostOfWork = Convert.ToDouble(reader["CostWork"]),
-                ImageSrc = Convert.ToString(reader["ImageSrc"])
-            };
-        }
+            Model model = new Model();
 
-        public static List<Model> ToModelList(SqlDataReader reader)
-        {
-            List<Model> list = new List<Model>();
+            var reader = database.GetSingleRow(query);
 
-            while (reader.Read())
+            if (reader.Read())
             {
-                Model model = new Model();
                 model.ModelId = Convert.ToInt32(reader["ModelId"]);
                 model.Name = Convert.ToString(reader["Name"]);
                 model.FabricId = Convert.ToInt32(reader["FabricId"]);
                 model.FurnitureId = Convert.ToInt32(reader["FurnitureId"]);
                 model.Price = Convert.ToDouble(reader["Price"]);
                 model.WasteFabric = Convert.ToDouble(reader["WasteFabric"]);
-                model.NumberFurniture = Convert.ToInt32(reader["WasteFabric"]);
-                model.CostOfWork = Convert.ToDouble(reader["CostWorkOf"]);
+                model.NumberFurniture = Convert.ToInt32(reader["NumberFurniture"]);
+                model.CostOfWork = Convert.ToDouble(reader["CostWork"]);
                 model.ImageSrc = Convert.ToString(reader["ImageSrc"]);
-                list.Add(model);
             }
 
-            return list;
+            reader.Close();
+
+            return model;
         }
     }
 }

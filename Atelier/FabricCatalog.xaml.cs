@@ -1,7 +1,8 @@
 ﻿namespace Atelier
 {
-    using Atelier.Logic;
-    using Atelier.Logic.Entities;
+    using Atelier.Logic.Models;
+    using Atelier.Logic.Repositories;
+    using Atelier.Logic.Repositories.Interface;
     using System.Windows;
     using System.Windows.Media;
 
@@ -13,37 +14,29 @@
         public ClothCatalog()
         {
             InitializeComponent();
-            dataContext = new Database();
+            fabricRepository = new FabricRepository();
             CountMaxId();
         }
 
-        private readonly Database dataContext;
+        private readonly IFabricRepository fabricRepository;
         
         private int MaxId {  get; set; }
 
         private void CountMaxId()
         {
-            string query = "SELECT MAX ([FabricId]) FROM [dbo].[Fabrics]";
-            var result = dataContext.GetSingleRow(query);
-            if (result.Read())
-            {
-                MaxId = Convert.ToInt32(result[0]);
-            }
+            MaxId = fabricRepository.GetMaxFabricId();
         }
 
-        private Fabric GetCloth(int id)
+        public Fabric GetFabric(int id)
         {
-            Fabric cloth = new Fabric();
+            Fabric fabric = new Fabric();
 
             if (id <= MaxId && id > 0)
             {
-                string query = $"SELECT [FabricId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Fabrics] WHERE [FabricId] = {id}";
-                var result = dataContext.GetSingleRow(query);
-                cloth = Fabric.ToModel(result);
-                result.Close();
+                fabric = fabricRepository.GetFabricById(id);
             }
 
-            return cloth;
+            return fabric;
         }
 
         public void FillForm(Fabric cloth)
@@ -63,7 +56,7 @@
         {
             int id = Convert.ToInt32(ClothIdLabel.Content) + 1;
 
-            var cloth = GetCloth(id);
+            var cloth = GetFabric(id);
 
             FillForm(cloth);
         }
@@ -72,7 +65,7 @@
         {
             int id = Convert.ToInt32(ClothIdLabel.Content) - 1;
 
-            var cloth = GetCloth(id);
+            var cloth = GetFabric(id);
 
             FillForm(cloth);
         }

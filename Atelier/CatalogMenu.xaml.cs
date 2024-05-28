@@ -1,18 +1,5 @@
-﻿using Atelier.Logic.Entities;
-using Atelier.Logic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Atelier.Logic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Atelier.Logic.Models;
 
 namespace Atelier
@@ -30,18 +17,15 @@ namespace Atelier
 
         Database dataContext;
 
-        private void ClothCatalogButton_Click(object sender, RoutedEventArgs e)
+        private void FabricCatalogButton_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
             ClothCatalog clothCatalog = new ClothCatalog();
             clothCatalog.Show();
 
-            string query = "SELECT [FabricId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Fabrics] WHERE [FabricId] = 1";
-            var result = dataContext.GetSingleRow(query);
-            Fabric cloth = Fabric.ToModel(result);
-            result.Close();
+            var fabric = clothCatalog.GetFabric(1);
 
-            clothCatalog.FillForm(cloth);
+            clothCatalog.FillForm(fabric);
         }
 
         private void FurnitureButton_Click(object sender, RoutedEventArgs e)
@@ -50,10 +34,7 @@ namespace Atelier
             FurnitureCatalog furnitureCatalog = new FurnitureCatalog();
             furnitureCatalog.Show();
 
-            string query = $"SELECT [FurnitureId],[Name],[Material],[Amount],[Price],[ImageSrc] FROM [Atelier].[dbo].[Furnitures] WHERE ([FurnitureId]) = 1";
-            var result = dataContext.GetSingleRow(query);
-            Furniture furniture = Furniture.ToModel(result);
-            result.Close();
+            var furniture = furnitureCatalog.GetFurniture(1);
 
             furnitureCatalog.FillForm(furniture);
         }
@@ -66,9 +47,7 @@ namespace Atelier
 
             Model model = new Model();
             string query = $" SELECT [ModelId],[Name],[FabricId],[FurnitureId],[Price],[WasteFabric],[NumberFurniture],[CostWork],[ImageSrc] FROM [Atelier].[dbo].[Models] WHERE [ModelId] = 1";
-            var result = dataContext.GetSingleRow(query);
-            model = Model.ToModel(result);
-            result.Close();
+            model = Model.ToModel(query, dataContext);
 
             string furnitureQuery = $"SELECT [Name] FROM [Atelier].[dbo].[Furnitures] WHERE [FurnitureId] = {model.FurnitureId}";
             var furniture = dataContext.GetSingleRow(furnitureQuery);

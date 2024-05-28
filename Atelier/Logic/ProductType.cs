@@ -1,8 +1,13 @@
-﻿namespace Atelier.Logic
+﻿using System.ComponentModel;
+
+namespace Atelier.Logic
 {
     public enum ProductType
     {
-        Cloth = 1,
+        [Description("Fabric")]
+        Fabric = 1,
+
+        [Description("Furniture")]
         Furniture = 2
     }
 }

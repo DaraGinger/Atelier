@@ -1,62 +1,49 @@
 ﻿namespace Atelier
 {
     using Atelier.Logic.Models;
-    using Atelier.Logic;
     using System.Windows;
     using System.Windows.Media;
+    using Atelier.Logic.Repositories.Interface;
+    using Atelier.Logic.Repositories;
 
     /// <summary>
     /// Interaction logic for ModelCatalog.xaml
     /// </summary>
     public partial class ModelCatalog : Window
     {
+        private readonly IFabricRepository fabricRepository;
+
+        private readonly IFurnitureRepository furnitureRepository;
+
+        private readonly IModelRepository modelRepository;
+
         public ModelCatalog()
         {
             InitializeComponent();
-            dataContext = new Database();
+            fabricRepository = new FabricRepository();
+            furnitureRepository = new FurnitureRepository();
+            modelRepository = new ModelRepository();
             CountMaxId();
         }
-
-        private readonly Database dataContext;
 
         private int MaxId { get; set; }
 
         private void CountMaxId()
         {
-            string query = "SELECT MAX ([ModelId]) FROM [dbo].[Models]";
-            var result = dataContext.GetSingleRow(query);
-            if (result.Read())
-            {
-                MaxId = Convert.ToInt32(result[0]);
-            }
+            MaxId = modelRepository.GetMaxModelId();
         }
 
-        private Model GetModel(int id)
+        public Model GetModel(int id)
         {
             Model model = new Model();
 
             if (id <= MaxId && id > 0)
             {
-                string query = $"SELECT [ModelId],[Name],[FabricId],[FurnitureId],[Price],[WasteFabric],[NumberFurniture],[CostWork],[ImageSrc] FROM [Atelier].[dbo].[Models] WHERE [ModelId] = {id}";
-                var result = dataContext.GetSingleRow(query);
-                model = Model.ToModel(result);
-                result.Close();
+                model = modelRepository.GetModelById(id);
+      
+                Furniture furniture = furnitureRepository.GetFurnitureById(model.FurnitureId);
 
-                string furnitureQuery = $"SELECT [Name] FROM [Atelier].[dbo].[Furnitures] WHERE [FurnitureId] = {model.FurnitureId}";
-                var furniture = dataContext.GetSingleRow(furnitureQuery);
-
-                if (furniture.Read())
-                {
-                    model.FurnitureName = Convert.ToString(furniture["Name"]);
-                }
-
-                string clothQuery = $"SELECT [Name] FROM [Atelier].[dbo].[Fabrics] WHERE [FabricId] = {model.FabricId}";
-                var cloth = dataContext.GetSingleRow(clothQuery);
-
-                if (cloth.Read())
-                {
-                    model.FabricName = Convert.ToString(cloth["Name"]);
-                }
+                Fabric fabric = fabricRepository.GetFabricById(model.FabricId);
 
                 FillForm(model);
             }

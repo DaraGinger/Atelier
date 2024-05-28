@@ -1,0 +1,66 @@
+﻿<Window x:Class="Atelier.ClientOrders"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Atelier"
+        mc:Ignorable="d"
+        Title="ListOrders" Height="670" Width="1153">
+    <Grid Margin="10,10,0,-6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="418*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DataGrid x:Name="OrdersDataGrid" IsReadOnly ="False" ItemsSource="{Binding ClientOrdersList}" AutoGenerateColumns="False" Margin="0,44,10,10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="#" Width="40" Binding="{Binding ClientOrderId}"/>
+                <DataGridTextColumn Header="ПІБ Замовника" Width="200" Binding="{Binding ClientName}"/>
+                <DataGridTextColumn Header="ПІБ Робітника" Width="200" Binding="{Binding WorkerName}"/>
+                <DataGridTextColumn Header="Ціна" Width="100" Binding="{Binding Price}"/>
+
+                <DataGridTemplateColumn Header="Дата замовлення" Width="110">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DateReceivingOrder, StringFormat=\{0:yyyy-MM-dd\}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Дата примірки" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DateFitting}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding DateFitting, UpdateSourceTrigger=PropertyChanged}" LostFocus="DateFitting_TextChanged"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Дата виконання" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ExecutionDate}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding ExecutionDate, UpdateSourceTrigger=PropertyChanged}" LostFocus="ExecutionDate_TextChanged"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Відмітка про оплату" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Payment}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="MenuButton" Content="&lt;=" HorizontalAlignment="Left" Height="26" Margin="19,6,0,0" VerticalAlignment="Top" Width="33" FontFamily="Constantia" FontSize="16" FontWeight="Bold" Foreground="White" Background="#FF7D1D1D" BorderBrush="#FF7D1D1D" Click="MenuButton_Click"/>
+    </Grid>
+</Window>
