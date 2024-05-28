@@ -38,12 +38,7 @@ namespace Atelier.Logic.Models
                 Surname = Convert.ToString(reader["Surname"]),
                 LastName = Convert.ToString(reader["LastName"]),
                 ProductId = Convert.ToInt32(reader["ProductId"]),
-                WorkerId = Convert.ToInt32(reader["WorkerId"]),
                 Price = Convert.ToDouble(reader["Price"]),
-                DateReceivingOrder = Convert.ToDateTime(reader["DateReceivingOrder"]),
-                DateFitting = Convert.ToDateTime(reader["DateFitting"]),
-                ExecutionDate = Convert.ToDateTime(reader["ExecutionDate"]),
-                Payment = Convert.ToBoolean(reader["Payment"]),
             };
         }
 

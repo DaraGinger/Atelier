@@ -59,6 +59,18 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Чек" Width="100">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                                <Hyperlink Click="Hyperlink_Click">
+                                    <TextBlock Text="Сформувати чек" />
+                                </Hyperlink>
+                            </TextBlock>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="MenuButton" Content="&lt;=" HorizontalAlignment="Left" Height="26" Margin="19,6,0,0" VerticalAlignment="Top" Width="33" FontFamily="Constantia" FontSize="16" FontWeight="Bold" Foreground="White" Background="#FF7D1D1D" BorderBrush="#FF7D1D1D" Click="MenuButton_Click"/>

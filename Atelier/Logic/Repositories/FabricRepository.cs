@@ -63,7 +63,7 @@ namespace Atelier.Logic.Repositories
 
         public Fabric GetFabricByName(string fabricName)
         {
-            string query = $"SELECT [FabricId],[SupplierId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Fabrics] WHERE [Name] = {fabricName}";
+            string query = $"SELECT [FabricId],[SupplierId],[Name],[Width],[Price],[Amount],[ImageSrc] FROM [dbo].[Fabrics] WHERE [Name]='{fabricName}'";
             return ToModel(query);
         }
 

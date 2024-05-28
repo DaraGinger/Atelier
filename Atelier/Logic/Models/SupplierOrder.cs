@@ -37,9 +37,10 @@ namespace Atelier.Logic.Models
                 supplierOrder.SupplierId = Convert.ToInt32(reader["SupplierId"]);
                 supplierOrder.WorkerId = Convert.ToInt32(reader["WorkerId"]);
                 supplierOrder.ProductName = Convert.ToString(reader["ProductName"]);
-                supplierOrder.ProductType = (ProductType)Convert.ToInt32(reader["ProductType"]);
+                supplierOrder.ProductType = (ProductType)Convert.ToInt32(reader["TypeProduct"]);
                 supplierOrder.WorkerId = Convert.ToInt32(reader["WorkerId"]);
                 supplierOrder.Price = Convert.ToDouble(reader["Price"]);
+                supplierOrder.Amount = Convert.ToDouble(reader["Amount"]);
                 supplierOrder.IsCompleted = Convert.ToBoolean(reader["IsCompleted"]);
                 supplierOrder.OrderDate = Convert.ToDateTime(reader["OrderDate"]);
                 supplierOrder.ExecutionDate = reader["ExecutionDate"] == DBNull.Value ? null : Convert.ToDateTime(reader["ExecutionDate"]);

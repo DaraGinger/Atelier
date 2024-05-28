@@ -92,14 +92,13 @@
             mainWindow.Show();
         }
 
-        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void TextBox_TextChanged_1(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-
+            var clientOrder = OrdersDataGrid.SelectedItem as ClientOrderHelper;
+            
+            Check check = new Check();
+            check.FillCheck(clientOrder.ClientOrderId);
+            check.ShowDialog();
         }
     }
 }

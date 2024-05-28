@@ -21,7 +21,7 @@ namespace Atelier.Logic.Repositories
         }
         public Furniture GetFurnitureByName(string name)
         {
-            string query = $"SELECT [FurnitureId],[SupplierId],[Name],[Material],[Amount],[Price],[ImageSrc] FROM [Atelier].[dbo].[Furnitures] WHERE [Name] = {name}";
+            string query = $"SELECT [FurnitureId],[SupplierId],[Name],[Material],[Amount],[Price],[ImageSrc] FROM [Atelier].[dbo].[Furnitures] WHERE [Name]='{name}'";
 
             return ToModel(query);
         }
@@ -64,7 +64,7 @@ namespace Atelier.Logic.Repositories
 
         public void UpdateFurnitureAmount(double amount, int furnitureId)
         {
-            string orderSupplierQuery = $"UPDATED [dbo].[Furniture] SET [Amount]={amount} WHERE [FurnitureId]={furnitureId}";
+            string orderSupplierQuery = $"UPDATE [dbo].[Furnitures] SET [Amount]={amount} WHERE [FurnitureId]={furnitureId}";
 
             context.ExecuteQuery(orderSupplierQuery);
         }

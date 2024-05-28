@@ -47,8 +47,8 @@ namespace Atelier
         private void SupplierOrderButton_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
-            //SupplierOrderList supplierOrderList = new SupplierOrderList();
-            //supplierOrderList.Show();
+            SupplierOrders supplierOrderList = new SupplierOrders();
+            supplierOrderList.Show();
         }
     }
 }

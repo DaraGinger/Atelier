@@ -32,6 +32,8 @@
             FillComboBoxes();
         }
 
+        private int ClientOrderId { get; set; }
+
         private void FillComboBoxes()
         {
             var fabricNames = fabricRepository.GetFabricNames();
@@ -78,7 +80,7 @@
                 FabricId = Convert.ToInt32(ClothesComboBox.Text.Substring(0, 1)),
                 FurnitureId = FurnitureComboBox.Text == "" ? 0 : Convert.ToInt32(FurnitureComboBox.Text.Substring(0, 1)),
                 ModelId = Convert.ToInt32(ModelComboBox.Text.Substring(0, 1)),
-                ProductCount = Convert.ToInt32(CountTextBox.Text)
+                NumberProducts = Convert.ToInt32(CountTextBox.Text)
             };
 
             Model model = modelRepository.GetModelById(product.ModelId);
@@ -87,11 +89,11 @@
 
             Furniture furniture = furnitureRepository.GetFurnitureById(product.FurnitureId);
 
-            product.Price = (fabric.Price * model.WasteFabric + furniture.Price * model.NumberFurniture + model.Price + model.CostOfWork) * product.ProductCount;
+            product.Price = (fabric.Price * model.WasteFabric + furniture.Price * model.NumberFurniture + model.Price + model.CostOfWork) * product.NumberProducts;
 
             int workerId = WorkerComboBox.Text == "" ? 0 : Convert.ToInt32(WorkerComboBox.Text.Substring(0, 1));
 
-            orderRepository.AddOrder(product, LastNameTextBox.Text, NameTextBox.Text, SurnameTextBox.Text, workerId);
+            ClientOrderId = orderRepository.AddOrder(product, LastNameTextBox.Text, NameTextBox.Text, SurnameTextBox.Text, workerId);
 
             UpdateFabric(fabric, model.WasteFabric, workerId);
 
@@ -189,6 +191,19 @@
             }
 
             return true;
+        }
+
+        private void CheckButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ClientOrderId == 0)
+            {
+                MessageBox.Show("Ви ще не зробили замовлення!");
+                return;
+            }
+
+            Check check = new Check();
+            check.FillCheck(ClientOrderId);
+            check.ShowDialog();
         }
     }
 }

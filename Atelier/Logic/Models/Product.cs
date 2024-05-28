@@ -10,7 +10,7 @@
 
         public int FabricId { get; set; }
 
-        public int ProductCount { get; set; }
+        public int NumberProducts { get; set; }
 
         public double Price { get; set; }
     }

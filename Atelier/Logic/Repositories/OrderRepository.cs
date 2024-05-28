@@ -12,22 +12,31 @@ namespace Atelier.Logic.Repositories
             context = new Database();
         }
 
-        public void AddOrder(Product product, string lastname, string name, string surname, int workerId)
+        public int AddOrder(Product product, string lastname, string name, string surname, int workerId)
         {
             DateTime dateTime = DateTime.Now;
             string date = dateTime.ToString("yyyy-MM-dd");
 
-            var productQuery = $"INSERT INTO [dbo].[Products]([ModelId],[ClothId],[FurnitureId],[NumberProducts],[Price]) OUTPUT inserted.[ProductId] VALUES({product.ModelId}, {product.FabricId},{product.FurnitureId},{product.ProductCount},{product.Price})";
+            var productQuery = $"INSERT INTO [dbo].[Products]([ModelId],[FabricId],[FurnitureId],[NumberProducts],[Price]) OUTPUT inserted.[ProductId] VALUES({product.ModelId}, {product.FabricId},{product.FurnitureId},{product.NumberProducts},{product.Price})";
             var reader = context.GetSingleRow(productQuery);
+
             if (reader.Read())
             {
                 product.ProductId = Convert.ToInt32(reader["ProductId"]);
             }
             reader.Close();
 
-            var clientOrderQuery = $"INSERT INTO [dbo].[ClientOrders] ([LastName],[Name],[Surname],[ProductId],[WorkerId],[Price],[DateReceivingOrder],[DateFitting],[ExecutionDate],[Payment]) VALUES ({lastname},{name},{surname},{product.ProductId},{workerId},{product.Price},'{date}',null,null,{0})";
-            context.ExecuteQuery(clientOrderQuery);
+            var clientOrderQuery = $"INSERT INTO [dbo].[ClientOrders] ([LastName],[Name],[Surname],[ProductId],[WorkerId],[Price],[DateReceivingOrder],[DateFitting],[ExecutionDate],[Payment]) OUTPUT inserted.[ClientOrderId] VALUES ('{lastname}','{name}','{surname}',{product.ProductId},{workerId},{product.Price.ToString().Replace(',','.')},'{date}',null,null,{0})";
+            reader = context.GetSingleRow(clientOrderQuery);
+            int clentOrderId = 0;
+
+            if (reader.Read())
+            {
+                clentOrderId = Convert.ToInt32(reader["ClientOrderId"]);
+            }
             reader.Close();
+
+            return clentOrderId;
         }
 
         public void AddSupplierOrder(SupplierOrder supplierOrder)
@@ -52,6 +61,8 @@ namespace Atelier.Logic.Repositories
             {
                 string workerQuery = $"SELECT [WorkerId],[LastName],[Name],[Surname],[NumberOrders] FROM [dbo].[Workers] WHERE [WorkerId]={order.WorkerId}";
                 Worker worker = Worker.ToModel(workerQuery, context);
+                DateTime dateFitting = order.DateFitting != null ? (DateTime)order.DateFitting : DateTime.MinValue;
+                DateTime executionDate = order.ExecutionDate != null ? (DateTime)order.ExecutionDate : DateTime.MinValue;
 
                 ClientOrderHelper clientOrder = new ClientOrderHelper
                 {
@@ -59,8 +70,8 @@ namespace Atelier.Logic.Repositories
                     ClientName = order.LastName + " " + order.Name + " " + order.Surname,
                     WorkerName = worker.LastName + " " + worker.Name + " " + worker.Surname,
                     DateReceivingOrder = order.DateReceivingOrder,
-                    DateFitting = order.DateFitting.ToString(),
-                    ExecutionDate = order.ExecutionDate.ToString(),
+                    DateFitting = dateFitting.ToString("yyyy-MM-dd") != DateTime.MinValue.ToString("yyyy-MM-dd") ? dateFitting.ToString("yyyy-MM-dd") : null,
+                    ExecutionDate = executionDate.ToString("yyyy-MM-dd") != DateTime.MinValue.ToString("yyyy-MM-dd") ? executionDate.ToString("yyyy-MM-dd") : null,
                     Price = order.Price,
                     Payment = order.Payment
                 };
@@ -105,7 +116,7 @@ namespace Atelier.Logic.Repositories
 
         public List<SupplierOrderHelper> GetSupplierOrders()
         {
-            string supplierOrdersQuery = "[SupplierOrderId],[SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[OrderDate],[ExecutionDate] FROM [dbo].[SupplierOrders]";
+            string supplierOrdersQuery = "SELECT [SupplierOrderId],[SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[OrderDate],[ExecutionDate] FROM [dbo].[SupplierOrders]";
 
             var reader = context.GetListDataQuery(supplierOrdersQuery);
 
@@ -121,13 +132,16 @@ namespace Atelier.Logic.Repositories
                 string supplierQuery = $"SELECT [SupplierId],[CompanyName] FROM [dbo].[Suppliers] WHERE [SupplierId]={order.SupplierId}";
                 Supplier supplier = Supplier.ToModel(supplierQuery, context);
 
+                DateTime date = (DateTime)order.ExecutionDate;
+
                 SupplierOrderHelper supplierOrder = new SupplierOrderHelper
                 {
                     SupplierOrderId = order.SupplierOrderId,
                     SupplierName = supplier.CompanyName,
+                    ProductName = order.ProductName,
                     WorkerName = worker.LastName + " " + worker.Name + " " + worker.Surname,
                     OrderDate = order.OrderDate,
-                    ExecutionDate = order.ExecutionDate.ToString(),
+                    ExecutionDate = date.ToString("yyyy-MM-dd"),
                     Price = order.Price,
                     Amount = order.Amount,
                     ProductType = order.ProductType,
@@ -152,6 +166,32 @@ namespace Atelier.Logic.Repositories
             var orderQuery = $"UPDATE [dbo].[SupplierOrders] SET [IsCompleted]={payment} WHERE [SupplierOrderId]={supplierOrderId}";
 
             context.ExecuteQuery(orderQuery);
+        }
+
+        public ClientOrder GetOrderById(int id)
+        {
+            string query = $"SELECT [ClientOrderId],[Payment],[LastName],[Name],[Surname],[Price],[ProductId] FROM [Atelier].[dbo].[ClientOrders] WHERE [ClientOrderId] = {id}";
+            
+            return ClientOrder.ToModel(query, context);
+        }
+
+        public Product GetProductById(int id)
+        {
+            string query = $"SELECT [ProductId],[ModelId],[FabricId],[FurnitureId],[NumberProducts],[Price] FROM [dbo].[Products] WHERE [ProductId]={id}";
+
+            var reader = context.GetSingleRow(query);
+            Product product = new Product()
+
+;           if (reader.Read())
+            {
+                product.FurnitureId = Convert.ToInt32(reader["FurnitureId"]);
+                product.FabricId = Convert.ToInt32(reader["FabricId"]);
+                product.ModelId = Convert.ToInt32(reader["ModelId"]);
+                product.NumberProducts = Convert.ToInt32(reader["NumberProducts"]);
+                product.Price = Convert.ToDouble(reader["Price"]);
+            }
+
+            return product;
         }
     }
 }
