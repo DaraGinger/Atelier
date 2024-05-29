@@ -12,18 +12,27 @@ namespace Atelier.Logic.Repositories
             context = new Database();
         }
 
-        public int AddOrder(Product product, string lastname, string name, string surname, int workerId)
+        public ClientOrder AddOrder(Product product, string lastname, string name, string surname, int workerId)
         {
             DateTime dateTime = DateTime.Now;
             string date = dateTime.ToString("yyyy-MM-dd");
 
-            var productQuery = $"INSERT INTO [dbo].[Products]([ModelId],[FabricId],[FurnitureId],[NumberProducts],[Price]) OUTPUT inserted.[ProductId] VALUES({product.ModelId}, {product.FabricId},{product.FurnitureId},{product.NumberProducts},{product.Price})";
+            var productQuery = $"INSERT INTO [dbo].[Products]([ModelId],[FabricId],[FurnitureId],[NumberProducts],[Price]) " +
+                $"OUTPUT inserted.[ProductId],inserted.[Price]" +
+                $"SELECT {product.ModelId}, {product.FabricId},{product.FurnitureId},{product.NumberProducts},(Fabric.Price*Model.WasteFabric+Furniture.Price*Model.NumberFurniture+Model.Price+Model.CostWork)*1 " +
+                $"FROM [dbo].[Fabrics] AS Fabric Join [dbo].[Furnitures] " +
+                $"AS Furniture ON Furniture.FurnitureId = {product.FurnitureId} " +
+                $"JOIN [dbo].[Models] AS Model ON Model.ModelId = {product.ModelId} " +
+                $"WHERE Fabric.[FabricId] = {product.FabricId}";
+
             var reader = context.GetSingleRow(productQuery);
 
             if (reader.Read())
             {
                 product.ProductId = Convert.ToInt32(reader["ProductId"]);
+                product.Price = Convert.ToDouble(reader["Price"]);
             }
+
             reader.Close();
 
             var clientOrderQuery = $"INSERT INTO [dbo].[ClientOrders] ([LastName],[Name],[Surname],[ProductId],[WorkerId],[Price],[DateReceivingOrder],[DateFitting],[ExecutionDate],[Payment]) OUTPUT inserted.[ClientOrderId] VALUES ('{lastname}','{name}','{surname}',{product.ProductId},{workerId},{product.Price.ToString().Replace(',','.')},'{date}',null,null,{0})";
@@ -36,7 +45,11 @@ namespace Atelier.Logic.Repositories
             }
             reader.Close();
 
-            return clentOrderId;
+            return new ClientOrder
+            {
+                ClientOrderId = clentOrderId,
+                Price = product.Price,
+            };
         }
 
         public void AddSupplierOrder(SupplierOrder supplierOrder)
@@ -44,7 +57,7 @@ namespace Atelier.Logic.Repositories
             string date = supplierOrder.OrderDate.ToString("yyyy-MM-dd");
             string price = supplierOrder.Price.ToString().Replace(',', '.');
 
-            string orderSupplierQuery = $"INSERT INTO [dbo].[SupplierOrders] ([SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[OrderDate],[ExecutionDate]) VALUES ({supplierOrder.SupplierId},{supplierOrder.WorkerId},{(int)supplierOrder.ProductType},'{supplierOrder.ProductName}',{supplierOrder.Amount},{price},1,'{date}',null)";
+            string orderSupplierQuery = $"INSERT INTO [dbo].[SupplierOrders] ([SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[OrderDate],[ExecutionDate],[IsPaid]) VALUES ({supplierOrder.SupplierId},{supplierOrder.WorkerId},{(int)supplierOrder.ProductType},'{supplierOrder.ProductName}',{supplierOrder.Amount},{price},0,'{date}',null),0";
         
             context.ExecuteQuery(orderSupplierQuery);
         }
@@ -119,7 +132,7 @@ namespace Atelier.Logic.Repositories
 
         public List<SupplierOrderHelper> GetSupplierOrders()
         {
-            string supplierOrdersQuery = "SELECT [SupplierOrderId],[SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[OrderDate],[ExecutionDate] FROM [dbo].[SupplierOrders]";
+            string supplierOrdersQuery = "SELECT [SupplierOrderId],[SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[IsPaid],[OrderDate],[ExecutionDate] FROM [dbo].[SupplierOrders]";
 
             var reader = context.GetListDataQuery(supplierOrdersQuery);
 
@@ -149,6 +162,7 @@ namespace Atelier.Logic.Repositories
                     Amount = order.Amount,
                     ProductType = order.ProductType,
                     IsCompleted = order.IsCompleted,
+                    IsPaid = order.IsPaid
                 };
 
                 helper.Add(supplierOrder);
@@ -166,7 +180,14 @@ namespace Atelier.Logic.Repositories
 
         public void UpdateSupplierPayment(int supplierOrderId, int payment)
         {
-            var orderQuery = $"UPDATE [dbo].[SupplierOrders] SET [IsCompleted]={payment} WHERE [SupplierOrderId]={supplierOrderId}";
+            var orderQuery = $"UPDATE [dbo].[SupplierOrders] SET [IsPaid]={payment} WHERE [SupplierOrderId]={supplierOrderId}";
+
+            context.ExecuteQuery(orderQuery);
+        }
+
+        public void UpdateSupplierIsComplete(int supplierOrderId, int isCompleted)
+        {
+            var orderQuery = $"UPDATE [dbo].[SupplierOrders] SET [IsCompleted]={isCompleted} WHERE [SupplierOrderId]={supplierOrderId}";
 
             context.ExecuteQuery(orderQuery);
         }

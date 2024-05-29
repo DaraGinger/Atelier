@@ -4,7 +4,7 @@ namespace Atelier.Logic.Repositories.Interface
 {
     public interface IOrderRepository
     {
-        int AddOrder(Product product, string lastname, string name, string surname, int workerId);
+        ClientOrder AddOrder(Product product, string lastname, string name, string surname, int workerId);
 
         void AddSupplierOrder(SupplierOrder supplierOrder);
 
@@ -23,6 +23,8 @@ namespace Atelier.Logic.Repositories.Interface
         void UpdateSupplierExecutionDate(int supplierOrderId, string date);
 
         void UpdateSupplierPayment(int supplierOrderId, int payment);
+
+        void UpdateSupplierIsComplete(int supplierOrderId, int isCompleted);
 
         ClientOrder GetOrderById(int id);
 

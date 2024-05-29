@@ -43,10 +43,18 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Відмітка про оплату" Width="120">
+                <DataGridTemplateColumn Header="Оплату" Width="50">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsCompleted}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" />
+                            <CheckBox IsChecked="{Binding IsPaid}" Checked="PaidCheckBox_Checked" Unchecked="PaidCheckBox_Unchecked" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Виконання" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsCompleted}" Checked="CompletedCheckBox_Checked" Unchecked="CompletedCheckBox_Unchecked" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

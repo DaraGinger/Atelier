@@ -85,29 +85,27 @@
 
             Model model = modelRepository.GetModelById(product.ModelId);
 
-            Fabric fabric = fabricRepository.GetFabricById(product.FabricId);
-
-            Furniture furniture = furnitureRepository.GetFurnitureById(product.FurnitureId);
-
-            product.Price = (fabric.Price * model.WasteFabric + furniture.Price * model.NumberFurniture + model.Price + model.CostOfWork) * product.NumberProducts;
-
             int workerId = WorkerComboBox.Text == "" ? 0 : Convert.ToInt32(WorkerComboBox.Text.Substring(0, 1));
 
-            ClientOrderId = orderRepository.AddOrder(product, LastNameTextBox.Text, NameTextBox.Text, SurnameTextBox.Text, workerId);
+            var clientOrder = orderRepository.AddOrder(product, LastNameTextBox.Text, NameTextBox.Text, SurnameTextBox.Text, workerId);
 
-            UpdateFabric(fabric, model.WasteFabric, workerId);
+            ClientOrderId = clientOrder.ClientOrderId;
 
-            UpdateFurniture(furniture, model.NumberFurniture, workerId);
+            UpdateFabric(product.FabricId, model.WasteFabric, workerId);
+
+            UpdateFurniture(product.FurnitureId, model.NumberFurniture, workerId);
 
             workerRepository.UpdateWorkerNumberOrders(workerId);
 
-            PriceLabel.Content = $"{product.Price} грн";
+            PriceLabel.Content = $"{clientOrder.Price} грн";
 
             MessageBox.Show("Success!");
         }
 
-        private void UpdateFabric(Fabric fabric, double wasteFabric, int workerId)
+        private void UpdateFabric(int fabricId, double wasteFabric, int workerId)
         {
+            Fabric fabric = fabricRepository.GetFabricById(fabricId);
+
             if (fabric.Amount == 0 || fabric.Amount < wasteFabric)
             {
                 int fabricCount = 20;
@@ -132,8 +130,10 @@
             }
         }
 
-        private void UpdateFurniture(Furniture furniture, int numberFurniture, int workerId)
+        private void UpdateFurniture(int furnitureId, int numberFurniture, int workerId)
         {
+            Furniture furniture = furnitureRepository.GetFurnitureById(furnitureId);
+
             if (furniture.Amount == 0 || furniture.Amount < numberFurniture)
             {
                 int fabricCount = 30;

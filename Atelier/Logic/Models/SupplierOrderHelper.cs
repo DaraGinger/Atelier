@@ -16,6 +16,8 @@
 
         public double Price { get; set; }
 
+        public bool IsPaid { get; set; }
+
         public bool IsCompleted { get; set; }
 
         public DateTime OrderDate { get; set; }

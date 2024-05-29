@@ -4,6 +4,7 @@ using Atelier.Logic.Repositories;
 using System.Collections.ObjectModel;
 using System.Windows;
 using Atelier.Logic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Atelier
 {
@@ -39,7 +40,63 @@ namespace Atelier
             DataContext = this;
         }
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        private void CompletedCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            var order = OrdersDataGrid.SelectedItem as SupplierOrderHelper;
+
+            if (order != null)
+            {
+                orderRepository.UpdateSupplierIsComplete(order.SupplierOrderId, 1);
+
+                switch (order.ProductType)
+                {
+                    case ProductType.Fabric:
+                        {
+                            var fabric = fabricRepository.GetFabricByName(order.ProductName);
+                            fabric.Amount += order.Amount;
+                            fabricRepository.UpdateFabricAmount(fabric.Amount, fabric.FabricId);
+                            break;
+                        }
+                    case ProductType.Furniture:
+                        {
+                            var furniture = furnitureRepository.GetFurnitureByName(order.ProductName);
+                            furniture.Amount += (int)order.Amount;
+                            furnitureRepository.UpdateFurnitureAmount(furniture.Amount, furniture.FurnitureId);
+                            break;
+                        }
+                }
+            }
+        }
+
+        private void CompletedCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            var order = OrdersDataGrid.SelectedItem as SupplierOrderHelper;
+
+            if (order != null)
+            {
+                orderRepository.UpdateSupplierIsComplete(order.SupplierOrderId, 0);
+
+                switch (order.ProductType)
+                {
+                    case ProductType.Fabric:
+                        {
+                            var fabric = fabricRepository.GetFabricByName(order.ProductName);
+                            fabric.Amount -= order.Amount;
+                            fabricRepository.UpdateFabricAmount(fabric.Amount, fabric.FabricId);
+                            break;
+                        }
+                    case ProductType.Furniture:
+                        {
+                            var furniture = furnitureRepository.GetFurnitureByName(order.ProductName);
+                            furniture.Amount -= (int)order.Amount;
+                            furnitureRepository.UpdateFurnitureAmount(furniture.Amount, furniture.FurnitureId);
+                            break;
+                        }
+                }
+            }
+        }
+
+        private void PaidCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             var order = OrdersDataGrid.SelectedItem as SupplierOrderHelper;
 
@@ -49,7 +106,7 @@ namespace Atelier
             }
         }
 
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        private void PaidCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             var order = OrdersDataGrid.SelectedItem as SupplierOrderHelper;
 
@@ -71,26 +128,6 @@ namespace Atelier
             }
 
             DateTime date = Convert.ToDateTime(order.ExecutionDate);
-
-            orderRepository.UpdateSupplierExecutionDate(order.SupplierOrderId, date.ToString("yyyy-MM-dd"));
-
-            switch (order.ProductType)
-            {
-                case ProductType.Fabric:
-                    {
-                        var fabric = fabricRepository.GetFabricByName(order.ProductName);
-                        fabric.Amount += order.Amount;
-                        fabricRepository.UpdateFabricAmount(fabric.Amount, fabric.FabricId);
-                        break;
-                    }
-                case ProductType.Furniture:
-                    {
-                        var furniture = furnitureRepository.GetFurnitureByName(order.ProductName);
-                        furniture.Amount += (int)order.Amount;
-                        furnitureRepository.UpdateFurnitureAmount(furniture.Amount, furniture.FurnitureId);
-                        break;
-                    }
-            }
         }
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)

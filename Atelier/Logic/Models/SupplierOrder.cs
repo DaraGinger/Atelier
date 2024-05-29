@@ -20,6 +20,8 @@ namespace Atelier.Logic.Models
 
         public bool IsCompleted { get; set; }
 
+        public bool IsPaid{ get; set; }
+
         public DateTime OrderDate { get; set; }
 
         public DateTime? ExecutionDate { get; set; }
@@ -42,6 +44,7 @@ namespace Atelier.Logic.Models
                 supplierOrder.Price = Convert.ToDouble(reader["Price"]);
                 supplierOrder.Amount = Convert.ToDouble(reader["Amount"]);
                 supplierOrder.IsCompleted = Convert.ToBoolean(reader["IsCompleted"]);
+                supplierOrder.IsPaid = Convert.ToBoolean(reader["IsPaid"]);
                 supplierOrder.OrderDate = Convert.ToDateTime(reader["OrderDate"]);
                 supplierOrder.ExecutionDate = reader["ExecutionDate"] == DBNull.Value ? null : Convert.ToDateTime(reader["ExecutionDate"]);
                 list.Add(supplierOrder);
