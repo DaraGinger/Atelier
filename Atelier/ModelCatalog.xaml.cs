@@ -51,6 +51,24 @@
             return model;
         }
 
+        private void NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            int id = Convert.ToInt32(ModelIdLabel.Content) + 1;
+
+            var model = GetModel(id);
+
+            FillForm(model);
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            int id = Convert.ToInt32(ModelIdLabel.Content) - 1;
+
+            var model = GetModel(id);
+
+            FillForm(model);
+        }
+
         public void FillForm(Model model)
         {
             if (model.ModelId > 0)
@@ -64,24 +82,6 @@
                 ClothImage.Source = (ImageSource)new ImageSourceConverter().ConvertFromString(model.ImageSrc);
                 NumberFurnitureLabel.Content = model.NumberFurniture;
             }
-        }
-
-        private void NextButton_Click(object sender, RoutedEventArgs e)
-        {
-            int id = Convert.ToInt32(ModelIdLabel.Content) + 1;
-
-            var furniture = GetModel(id);
-
-            FillForm(furniture);
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            int id = Convert.ToInt32(ModelIdLabel.Content) - 1;
-
-            var furniture = GetModel(id);
-
-            FillForm(furniture);
         }
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)

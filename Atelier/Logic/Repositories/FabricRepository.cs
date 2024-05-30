@@ -54,9 +54,14 @@ namespace Atelier.Logic.Repositories
             return names;
         }
 
-        public void UpdateFabricAmount(double amount, int fabricId)
+        public void UpdateFabricAmount(double amount, int productId)
         {
-            string orderSupplierQuery = $"UPDATE [dbo].[Fabrics] SET [Amount]={amount.ToString().Replace(',', '.')} WHERE [FabricId]={fabricId}";
+            string orderSupplierQuery = $"UPDATE [dbo].[Fabrics] " +
+                $"SET [Amount] = Fabric.Amount-Product.NumberProducts*Model.WasteFabric " +
+                $"FROM [dbo].[Fabrics] AS Fabric " +
+                $"JOIN [dbo].[Products] AS Product ON Product.ProductId = {} " +
+                $"JOIN [dbo].[Models] AS Model ON Model.ModelId = Product.ModelId " +
+                $"WHERE Fabric.FabricId = 1";
 
             context.ExecuteQuery(orderSupplierQuery);
         }

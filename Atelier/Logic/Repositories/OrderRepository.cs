@@ -57,7 +57,9 @@ namespace Atelier.Logic.Repositories
             string date = supplierOrder.OrderDate.ToString("yyyy-MM-dd");
             string price = supplierOrder.Price.ToString().Replace(',', '.');
 
-            string orderSupplierQuery = $"INSERT INTO [dbo].[SupplierOrders] ([SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[OrderDate],[ExecutionDate],[IsPaid]) VALUES ({supplierOrder.SupplierId},{supplierOrder.WorkerId},{(int)supplierOrder.ProductType},'{supplierOrder.ProductName}',{supplierOrder.Amount},{price},0,'{date}',null),0";
+            string orderSupplierQuery = $"INSERT INTO [dbo].[SupplierOrders] " +
+                $"([SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[OrderDate],[ExecutionDate],[IsPaid]) " +
+                $"VALUES ({supplierOrder.SupplierId},{supplierOrder.WorkerId},{(int)supplierOrder.ProductType},'{supplierOrder.ProductName}',{supplierOrder.Amount},{price},0,'{date}',null,0)";
         
             context.ExecuteQuery(orderSupplierQuery);
         }

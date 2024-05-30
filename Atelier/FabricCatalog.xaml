@@ -8,7 +8,7 @@
         Title="ClothCatalog" Height="489" Width="867">
     <Grid Height="479" VerticalAlignment="Top">
         <Image x:Name="ClothImage" HorizontalAlignment="Left" Height="313" Margin="19,46,0,0" VerticalAlignment="Top" Width="465"/>
-        <Button x:Name="NextButton" Content="Далі" HorizontalAlignment="Left" Height="31" Margin="717,405,0,0" VerticalAlignment="Top" Width="120" Click="Button_Click" BorderBrush="#FF7D1D1D" Background="#FF7D1D1D" FontSize="20" FontFamily="Constantia" Foreground="White" FontWeight="Bold"/>
+        <Button x:Name="NextButton" Content="Далі" HorizontalAlignment="Left" Height="31" Margin="717,405,0,0" VerticalAlignment="Top" Width="120" Click="NextButton_Click" BorderBrush="#FF7D1D1D" Background="#FF7D1D1D" FontSize="20" FontFamily="Constantia" Foreground="White" FontWeight="Bold"/>
         <Label x:Name="Id" Content="Id:" HorizontalAlignment="Left" Height="28" Margin="494,138,0,0" VerticalAlignment="Top" Width="46" Foreground="#FF7D1D1D" FontFamily="Constantia" FontSize="16"/>
         <Label x:Name="ClothIdLabel" Content="1" HorizontalAlignment="Left" Height="42" Margin="519,138,0,0" VerticalAlignment="Top" Width="38" FontFamily="Constantia" FontWeight="Bold" FontSize="16" Foreground="#FF7D1D1D"/>
         <Label Content="Price:" HorizontalAlignment="Left" Height="26" Margin="500,253,0,0" VerticalAlignment="Top" Width="80" FontSize="16" FontFamily="Constantia" Foreground="#FF7D1D1D"/>

@@ -102,7 +102,7 @@
             MessageBox.Show("Success!");
         }
 
-        private void UpdateFabric(int fabricId, double wasteFabric, int workerId)
+        private void UpdateFabric(int fabricId, double wasteFabric, int workerId, int numberProducts)
         {
             Fabric fabric = fabricRepository.GetFabricById(fabricId);
 
@@ -116,7 +116,7 @@
                     ProductName = fabric.Name,
                     ProductType = ProductType.Fabric,
                     Amount = fabricCount,
-                    Price = fabricCount * fabric.Price,
+                    Price = fabricCount * fabric.Price * numberProducts,
                     WorkerId = workerId,
                     OrderDate = DateTime.Now
                 };
@@ -125,12 +125,12 @@
             }
             else
             {
-                double rest = fabric.Amount - wasteFabric;
+                double rest = fabric.Amount - (wasteFabric*numberProducts);
                 fabricRepository.UpdateFabricAmount(rest, fabric.FabricId);
             }
         }
 
-        private void UpdateFurniture(int furnitureId, int numberFurniture, int workerId)
+        private void UpdateFurniture(int furnitureId, int numberFurniture, int workerId, int numberProducts)
         {
             Furniture furniture = furnitureRepository.GetFurnitureById(furnitureId);
 

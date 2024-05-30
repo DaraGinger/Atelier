@@ -46,7 +46,7 @@ namespace Atelier
             FurnitureTextBlock.Text = furniture.Name;
             FurniturePriceLabel.Content = $"{furniture.Price} * {model.NumberFurniture} * {product.NumberProducts} = {furniture.Price* model.NumberFurniture* product.NumberProducts}";
 
-            WorkTextBlock.Text = "Cost of work";
+            WorkTextBlock.Text = "Ціна роботи";
             WorkPriceLabel.Content = $"{model.CostOfWork} * {product.NumberProducts}";
 
             PriceLabel.Content = $"{product.Price}";

@@ -16,7 +16,7 @@ namespace Atelier.Logic.Repositories
         {
             List<string> workerNames = new List<string>();
 
-            var workerQuery = $"SELECT [WorkerId],[Name],[LastName],[Surname] FROM [dbo].[Workers] WHERE [NumberOrders] <= 3 AND [WorkerId]>0";
+            var workerQuery = $"SELECT [WorkerId],[Name],[LastName],[Surname] FROM [dbo].[Workers] WHERE [NumberOrders] < 3";
 
             var result = context.GetListDataQuery(workerQuery);
             while (result.Read())
@@ -36,7 +36,7 @@ namespace Atelier.Logic.Repositories
 
         public void UpdateWorkerNumberOrders(int workerId)
         {
-            string workerQuery = $"UPDATE [dbo].[Workers] SET [NumberOrders]+=1 WHERE [WorkerId]={workerId} AND [WorkerId]>0";
+            string workerQuery = $"UPDATE [dbo].[Workers] SET [NumberOrders]+=1 WHERE [WorkerId]={workerId}";
             context.ExecuteQuery(workerQuery);
         }
     }

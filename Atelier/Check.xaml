@@ -9,12 +9,12 @@
     <Grid Margin="0,0,0,-6">
         <Label Content="Чек" HorizontalAlignment="Center" Height="54" VerticalAlignment="Top" Width="70" FontFamily="Constantia" FontSize="36"/>
         <Label x:Name="ModelPriceLabel" Content="$"  HorizontalAlignment="Left" HorizontalContentAlignment="Right"  Height="28" Margin="128,97,0,0" VerticalAlignment="Top" Width="218"/>
-        <Label x:Name="FabricPriceLabel" Content="$"  HorizontalAlignment="Left" HorizontalContentAlignment="Right"  Height="28" Margin="128,192,0,0" VerticalAlignment="Top" Width="218"/>
-        <Label x:Name="FurniturePriceLabel" Content="$"  HorizontalAlignment="Left" HorizontalContentAlignment="Right"  Height="28" Margin="128,260,0,0" VerticalAlignment="Top" Width="218"/>
+        <Label x:Name="FabricPriceLabel" Content="$"  HorizontalAlignment="Left" HorizontalContentAlignment="Right"  Height="28" Margin="128,174,0,0" VerticalAlignment="Top" Width="218"/>
+        <Label x:Name="FurniturePriceLabel" Content="$"  HorizontalAlignment="Left" HorizontalContentAlignment="Right"  Height="28" Margin="128,242,0,0" VerticalAlignment="Top" Width="218"/>
         <Label Content="----------------------------------------------------------------------" HorizontalAlignment="Left" Height="41" Margin="-17,350,0,0" VerticalAlignment="Top" Width="385" FontSize="20"/>
         <Label Content="Сума:" HorizontalAlignment="Left" Height="37" Margin="20,386,0,0" VerticalAlignment="Top" Width="76" FontSize="20" FontFamily="Arial"/>
         <Label x:Name="PriceLabel" Content="Label" HorizontalAlignment="Left" HorizontalContentAlignment="Right" Height="38" Margin="237,386,0,0" VerticalAlignment="Top" Width="109" FontSize="20" FontFamily="Arial" FontWeight="Bold"/>
-        <Label x:Name="WorkPriceLabel" Content="$"  HorizontalAlignment="Left" HorizontalContentAlignment="Right"  Height="28" Margin="128,322,0,0" VerticalAlignment="Top" Width="218"/>
+        <Label x:Name="WorkPriceLabel" Content="$"  HorizontalAlignment="Left" HorizontalContentAlignment="Right"  Height="28" Margin="128,308,0,0" VerticalAlignment="Top" Width="218"/>
         <TextBlock x:Name="ModelTextBlock" HorizontalAlignment="Left" Height="44" Margin="20,71,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="267"/>
         <TextBlock x:Name="FabricTextBlock" HorizontalAlignment="Left" Height="44" Margin="20,148,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Width="267"/>
         <TextBlock x:Name="FurnitureTextBlock" HorizontalAlignment="Left" Height="44" Margin="20,0,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center" Width="267"/>

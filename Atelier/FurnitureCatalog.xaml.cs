@@ -37,20 +37,7 @@ namespace Atelier
 
             return furniture;
         }
-
-        public void FillForm(Furniture furniture)
-        {
-            if (furniture.FurnitureId > 0)
-            {
-                NameTextBlock.Text = furniture.Name;
-                ClothIdLabel.Content = furniture.FurnitureId;
-                AmountLabel.Content = furniture.Amount + " шт";
-                MaterialLabel.Content = furniture.Material;
-                PriceLabel.Content = furniture.Price + " грн/шт";
-                ClothImage.Source = (ImageSource)new ImageSourceConverter().ConvertFromString(furniture.ImageSrc);
-            }
-        }
-
+       
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
             int id = Convert.ToInt32(ClothIdLabel.Content) + 1;
@@ -67,6 +54,19 @@ namespace Atelier
             var furniture = GetFurniture(id);
 
             FillForm(furniture);
+        }
+
+        public void FillForm(Furniture furniture)
+        {
+            if (furniture.FurnitureId > 0)
+            {
+                NameTextBlock.Text = furniture.Name;
+                ClothIdLabel.Content = furniture.FurnitureId;
+                AmountLabel.Content = furniture.Amount + " шт";
+                MaterialLabel.Content = furniture.Material;
+                PriceLabel.Content = furniture.Price + " грн/шт";
+                ClothImage.Source = (ImageSource)new ImageSourceConverter().ConvertFromString(furniture.ImageSrc);
+            }
         }
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)

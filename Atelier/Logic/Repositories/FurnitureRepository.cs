@@ -19,12 +19,6 @@ namespace Atelier.Logic.Repositories
             return ToModel(query);
 
         }
-        public Furniture GetFurnitureByName(string name)
-        {
-            string query = $"SELECT [FurnitureId],[SupplierId],[Name],[Material],[Amount],[Price],[ImageSrc] FROM [Atelier].[dbo].[Furnitures] WHERE [Name]='{name}'";
-
-            return ToModel(query);
-        }
 
         public int GetMaxFurnitureId()
         {
@@ -41,6 +35,13 @@ namespace Atelier.Logic.Repositories
             result.Close();
 
             return maxId;
+        }
+
+        public Furniture GetFurnitureByName(string name)
+        {
+            string query = $"SELECT [FurnitureId],[SupplierId],[Name],[Material],[Amount],[Price],[ImageSrc] FROM [Atelier].[dbo].[Furnitures] WHERE [Name]='{name}'";
+
+            return ToModel(query);
         }
 
         public List<string> GetFurnitureNames()
