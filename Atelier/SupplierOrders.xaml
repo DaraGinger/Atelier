@@ -54,7 +54,7 @@
                 <DataGridTemplateColumn Header="Виконання" Width="120">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding IsCompleted}" Checked="CompletedCheckBox_Checked" Unchecked="CompletedCheckBox_Unchecked" />
+                            <CheckBox IsChecked="{Binding IsCompleted}" Checked="CompletedCheckBox_Checked" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

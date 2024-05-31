@@ -26,8 +26,6 @@ namespace Atelier.Logic.Repositories.Interface
 
         void UpdateSupplierIsComplete(int supplierOrderId, int isCompleted);
 
-        ClientOrder GetOrderById(int id);
-
-        Product GetProductById(int id);
+        CheckModel GetCheck(int id);
     }
 }

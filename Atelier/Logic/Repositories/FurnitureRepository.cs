@@ -63,9 +63,25 @@ namespace Atelier.Logic.Repositories
             return names;
         }
 
-        public void UpdateFurnitureAmount(double amount, int furnitureId)
+        public void UpdateFurnitureAmount(int productId)
         {
-            string orderSupplierQuery = $"UPDATE [dbo].[Furnitures] SET [Amount]={amount} WHERE [FurnitureId]={furnitureId}";
+            string orderSupplierQuery = $"UPDATE [dbo].[Furnitures] " +
+                $"SET [Amount] = Furniture.Amount-Product.NumberProducts*Model.NumberFurniture " +
+                $"FROM [dbo].[Furnitures] AS Furniture " +
+                $"JOIN [dbo].[Products] AS Product ON Product.ProductId = {productId} " +
+                $"JOIN [dbo].[Models] AS Model ON Model.ModelId = Product.ModelId " +
+                $"WHERE Furniture.FurnitureId = Product.FurnitureId"; ;
+
+            context.ExecuteQuery(orderSupplierQuery);
+        }
+
+        public void UpdateFurnitureAmountBySupplierOrder(int supplierOrderId)
+        {
+            string orderSupplierQuery = $"UPDATE [dbo].[Furnitures] " +
+                $"SET [Amount] +=SupplierOrder.Amount " +
+                $"FROM [dbo].[Furnitures] AS Furniture " +
+                $"JOIN [dbo].[SupplierOrders] AS SupplierOrder ON SupplierOrder.SupplierOrderId = {supplierOrderId} " +
+                $"WHERE Furniture.[Name] = SupplierOrder.ProductName";
 
             context.ExecuteQuery(orderSupplierQuery);
         }

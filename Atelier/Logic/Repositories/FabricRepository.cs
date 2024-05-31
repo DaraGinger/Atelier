@@ -54,21 +54,25 @@ namespace Atelier.Logic.Repositories
             return names;
         }
 
-        public void UpdateFabricAmount(double amount, int productId)
+        public void UpdateFabricAmount(int productId)
         {
             string orderSupplierQuery = $"UPDATE [dbo].[Fabrics] " +
                 $"SET [Amount] = Fabric.Amount-Product.NumberProducts*Model.WasteFabric " +
                 $"FROM [dbo].[Fabrics] AS Fabric " +
-                $"JOIN [dbo].[Products] AS Product ON Product.ProductId = {} " +
+                $"JOIN [dbo].[Products] AS Product ON Product.ProductId = {productId} " +
                 $"JOIN [dbo].[Models] AS Model ON Model.ModelId = Product.ModelId " +
-                $"WHERE Fabric.FabricId = 1";
+                $"WHERE Fabric.FabricId = Product.FabricId";
 
             context.ExecuteQuery(orderSupplierQuery);
         }
 
-        public void RemoveFabricAmount(double amount, int fabricId)
+        public void UpdateFabricAmountBySupplierOrder(int supplierOrderId)
         {
-            string orderSupplierQuery = $"UPDATE [dbo].[Fabrics] SET [Amount]-={amount.ToString().Replace(',', '.')} WHERE [FabricId]={fabricId}";
+            string orderSupplierQuery = $"UPDATE [dbo].[Fabrics] " +
+                $"SET [Amount] +=SupplierOrder.Amount " +
+                $"FROM [dbo].[Fabrics] AS Fabric " +
+                $"JOIN [dbo].[SupplierOrders] AS SupplierOrder ON SupplierOrder.SupplierOrderId={supplierOrderId} " +
+                $"WHERE Fabric.[Name] = SupplierOrder.ProductName";
 
             context.ExecuteQuery(orderSupplierQuery);
         }

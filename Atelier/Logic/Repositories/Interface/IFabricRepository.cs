@@ -10,9 +10,9 @@ namespace Atelier.Logic.Repositories.Interface
 
         List<string> GetFabricNames();
 
-        void UpdateFabricAmount(double amount, int fabricId);
+        void UpdateFabricAmount(int product);
 
-        void RemoveFabricAmount(double amount, int fabricId);
+        void UpdateFabricAmountBySupplierOrder(int supplierOrderId);
 
         Fabric GetFabricByName(string fabricName);
     }

@@ -19,7 +19,8 @@ namespace Atelier.Logic.Repositories
 
             var productQuery = $"INSERT INTO [dbo].[Products]([ModelId],[FabricId],[FurnitureId],[NumberProducts],[Price]) " +
                 $"OUTPUT inserted.[ProductId],inserted.[Price]" +
-                $"SELECT {product.ModelId}, {product.FabricId},{product.FurnitureId},{product.NumberProducts},(Fabric.Price*Model.WasteFabric+Furniture.Price*Model.NumberFurniture+Model.Price+Model.CostWork)*1 " +
+                $"SELECT {product.ModelId}, {product.FabricId},{product.FurnitureId},{product.NumberProducts}," +
+                $"(Fabric.Price*Model.WasteFabric+Furniture.Price*Model.NumberFurniture+Model.Price+Model.CostWork)*1 " +
                 $"FROM [dbo].[Fabrics] AS Fabric Join [dbo].[Furnitures] " +
                 $"AS Furniture ON Furniture.FurnitureId = {product.FurnitureId} " +
                 $"JOIN [dbo].[Models] AS Model ON Model.ModelId = {product.ModelId} " +
@@ -35,7 +36,10 @@ namespace Atelier.Logic.Repositories
 
             reader.Close();
 
-            var clientOrderQuery = $"INSERT INTO [dbo].[ClientOrders] ([LastName],[Name],[Surname],[ProductId],[WorkerId],[Price],[DateReceivingOrder],[DateFitting],[ExecutionDate],[Payment]) OUTPUT inserted.[ClientOrderId] VALUES ('{lastname}','{name}','{surname}',{product.ProductId},{workerId},{product.Price.ToString().Replace(',','.')},'{date}',null,null,{0})";
+            var clientOrderQuery = $"INSERT INTO [dbo].[ClientOrders] " +
+                $"([LastName],[Name],[Surname],[ProductId],[WorkerId],[Price],[DateReceivingOrder],[DateFitting],[ExecutionDate],[Payment]) " +
+                $"OUTPUT inserted.[ClientOrderId] " +
+                $"VALUES ('{lastname}','{name}','{surname}',{product.ProductId},{workerId},{product.Price.ToString().Replace(',', '.')},'{date}',null,null,{0})";
             reader = context.GetSingleRow(clientOrderQuery);
             int clentOrderId = 0;
 
@@ -58,46 +62,65 @@ namespace Atelier.Logic.Repositories
             string price = supplierOrder.Price.ToString().Replace(',', '.');
 
             string orderSupplierQuery = $"INSERT INTO [dbo].[SupplierOrders] " +
-                $"([SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[OrderDate],[ExecutionDate],[IsPaid]) " +
-                $"VALUES ({supplierOrder.SupplierId},{supplierOrder.WorkerId},{(int)supplierOrder.ProductType},'{supplierOrder.ProductName}',{supplierOrder.Amount},{price},0,'{date}',null,0)";
-        
+                $"([SupplierId]," +
+                $"[WorkerId]," +
+                $"[TypeProduct]," +
+                $"[ProductName]," +
+                $"[Amount]," +
+                $"[Price]," +
+                $"[IsCompleted]," +
+                $"[OrderDate]," +
+                $"[ExecutionDate]," +
+                $"[IsPaid]) " +
+                $"VALUES " +
+                $"({supplierOrder.SupplierId}," +
+                $"{supplierOrder.WorkerId}," +
+                $"{(int)supplierOrder.ProductType}," +
+                $"'{supplierOrder.ProductName}'," +
+                $"{supplierOrder.Amount}," +
+                $"{price},0,'{date}',null,0)";
+
             context.ExecuteQuery(orderSupplierQuery);
         }
 
         public List<ClientOrderHelper> GetOrders()
         {
-            string clientOrdersQuery = "SELECT [ClientOrderId],[LastName],[Name],[Surname],[ProductId],[WorkerId],[Price],[DateReceivingOrder],[DateFitting],[ExecutionDate],[Payment] FROM [dbo].[ClientOrders]";
+            string clientOrdersQuery = "SELECT " +
+            "ClientOrder.ClientOrderId," +
+            "ClientOrder.LastName+' '+ClientOrder.[Name]+' '+ClientOrder.Surname AS ClientName," +
+            "Worker.LastName+' '+Worker.[Name]+' '+Worker.Surname AS WorkerName," +
+            "ClientOrder.ProductId," +
+            "ClientOrder.Price," +
+            "ClientOrder.DateReceivingOrder," +
+            "ClientOrder.DateFitting,ClientOrder.ExecutionDate," +
+            "ClientOrder.Payment " +
+            "FROM[dbo].[ClientOrders] AS ClientOrder " +
+            "JOIN[dbo].[Workers] AS Worker ON Worker.WorkerId = ClientOrder.WorkerId " +
+            "WHERE[ExecutionDate] IS NULL";
 
             var reader = context.GetListDataQuery(clientOrdersQuery);
 
-            List<ClientOrder> orders = ClientOrder.ToModelList(reader);
+            List<ClientOrderHelper> orders = new List<ClientOrderHelper>(); 
 
-            List<ClientOrderHelper> helper = new List<ClientOrderHelper>();
-
-            foreach (var order in orders)
+            while (reader.Read())
             {
-                string workerQuery = $"SELECT [WorkerId],[LastName],[Name],[Surname],[NumberOrders] FROM [dbo].[Workers] WHERE [WorkerId]={order.WorkerId}";
-                Worker worker = Worker.ToModel(workerQuery, context);
-                DateTime dateFitting = order.DateFitting != null ? (DateTime)order.DateFitting : DateTime.MinValue;
-                DateTime executionDate = order.ExecutionDate != null ? (DateTime)order.ExecutionDate : DateTime.MinValue;
-
                 ClientOrderHelper clientOrder = new ClientOrderHelper
                 {
-                    ClientOrderId = order.ClientOrderId,
-                    ProductId = order.ProductId,
-                    ClientName = order.LastName + " " + order.Name + " " + order.Surname,
-                    WorkerName = worker.LastName + " " + worker.Name + " " + worker.Surname,
-                    DateReceivingOrder = order.DateReceivingOrder,
-                    DateFitting = dateFitting.ToString("yyyy-MM-dd") != DateTime.MinValue.ToString("yyyy-MM-dd") ? dateFitting.ToString("yyyy-MM-dd") : null,
-                    ExecutionDate = executionDate.ToString("yyyy-MM-dd") != DateTime.MinValue.ToString("yyyy-MM-dd") ? executionDate.ToString("yyyy-MM-dd") : null,
-                    Price = order.Price,
-                    Payment = order.Payment
+                    ClientOrderId = Convert.ToInt32(reader["ClientOrderId"]),
+                    ProductId = Convert.ToInt32(reader["ProductId"]),
+                    ClientName = Convert.ToString(reader["ClientName"]),
+                    WorkerName = Convert.ToString(reader["WorkerName"]),
+                    Price = Convert.ToDouble(reader["Price"]),
+                    DateReceivingOrder = Convert.ToDateTime(reader["DateReceivingOrder"]),
+                    DateFitting = reader["DateFitting"] == DBNull.Value ? null : Convert.ToString(reader["DateFitting"]).Replace("0:00:00",""),
+                    ExecutionDate = reader["ExecutionDate"] == DBNull.Value ? null : Convert.ToString(reader["ExecutionDate"]),
+                    Payment = Convert.ToBoolean(reader["Payment"])
                 };
 
-                helper.Add(clientOrder);
+                orders.Add(clientOrder);
             }
 
-            return helper;
+            return orders;
         }
 
         public void UpdateFittingDate(int clientOrderId, string date)
@@ -134,7 +157,7 @@ namespace Atelier.Logic.Repositories
 
         public List<SupplierOrderHelper> GetSupplierOrders()
         {
-            string supplierOrdersQuery = "SELECT [SupplierOrderId],[SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[IsPaid],[OrderDate],[ExecutionDate] FROM [dbo].[SupplierOrders]";
+            string supplierOrdersQuery = "SELECT [SupplierOrderId],[SupplierId],[WorkerId],[TypeProduct],[ProductName],[Amount],[Price],[IsCompleted],[IsPaid],[OrderDate],[ExecutionDate] FROM [dbo].[SupplierOrders] WHERE [IsCompleted]=0";
 
             var reader = context.GetListDataQuery(supplierOrdersQuery);
 
@@ -194,30 +217,51 @@ namespace Atelier.Logic.Repositories
             context.ExecuteQuery(orderQuery);
         }
 
-        public ClientOrder GetOrderById(int id)
+        public CheckModel GetCheck(int id)
         {
-            string query = $"SELECT [ClientOrderId],[Payment],[LastName],[Name],[Surname],[Price],[ProductId] FROM [Atelier].[dbo].[ClientOrders] WHERE [ClientOrderId] = {id}";
-            
-            return ClientOrder.ToModel(query, context);
-        }
-
-        public Product GetProductById(int id)
-        {
-            string query = $"SELECT [ProductId],[ModelId],[FabricId],[FurnitureId],[NumberProducts],[Price] FROM [dbo].[Products] WHERE [ProductId]={id}";
-
+            string query = $"SELECT Product.NumberProducts," +
+                $"Model.Name AS ModelName," +
+                $"Model.CostWork,Model.WasteFabric," +
+                $"Model.NumberFurniture,Model.Price AS ModelPrice," +
+                $"Fabric.Name AS FabricName," +
+                $"Fabric.Price AS FabricPrice," +
+                $"Furniture.Name AS FurnitureName," +
+                $"Furniture.Price AS FurniturePrice," +
+                $"Model.Price*Product.NumberProducts AS SumModel," +
+                $"Fabric.Price*Model.WasteFabric*Product.NumberProducts AS SumFabric," +
+                $"Furniture.Price*Model.NumberFurniture*Product.NumberProducts AS SumFurniture," +
+                $"Model.Price*Product.NumberProducts+Fabric.Price*Model.WasteFabric*Product.NumberProducts+" +
+                $"SFurniture.Price*Model.NumberFurniture*Product.NumberProducts+Model.CostWork AS Price " +
+                $"FROM [dbo].[ClientOrders] AS [Order] " +
+                $"JOIN [dbo].[Products] AS Product ON Product.ProductId=[Order].ProductId " +
+                $"JOIN [dbo].[Fabrics] AS Fabric ON Fabric.FabricId = Product.FabricId " +
+                $"JOIN [dbo].[Furnitures] AS Furniture ON Furniture.FurnitureId = Product.FurnitureId " +
+                $"JOIN [dbo].[Models] AS Model ON Model.ModelId = Product.ModelId" +
+                $" WHERE [Order].ClientOrderId = {id}";
             var reader = context.GetSingleRow(query);
-            Product product = new Product()
 
-;           if (reader.Read())
+            reader.Read();
+
+            CheckModel check = new CheckModel
             {
-                product.FurnitureId = Convert.ToInt32(reader["FurnitureId"]);
-                product.FabricId = Convert.ToInt32(reader["FabricId"]);
-                product.ModelId = Convert.ToInt32(reader["ModelId"]);
-                product.NumberProducts = Convert.ToInt32(reader["NumberProducts"]);
-                product.Price = Convert.ToDouble(reader["Price"]);
-            }
+                ModelPrice = Convert.ToDouble(reader["ModelPrice"]),
+                Price = Convert.ToDouble(reader["Price"]),
+                SumModel = Convert.ToDouble(reader["SumModel"]),
+                FabricPrice = Convert.ToDouble(reader["FabricPrice"]),
+                SumFabric = Convert.ToDouble(reader["SumFabric"]),
+                FurniturePrice = Convert.ToDouble(reader["FurniturePrice"]),
+                SumFurniture = Convert.ToDouble(reader["SumFurniture"]),
+                WasteFabric = Convert.ToDouble(reader["WasteFabric"]),
+                NumberFurniture = Convert.ToInt32(reader["NumberFurniture"]),
+                NumberProducts = Convert.ToInt32(reader["NumberFurniture"]),
+                ModelName = Convert.ToString(reader["ModelName"]),
+                FabricName = Convert.ToString(reader["FabricName"]),
+                FurnitureName = Convert.ToString(reader["FurnitureName"]),
+            };
 
-            return product;
+            reader.Close();
+
+            return check;
         }
     }
 }

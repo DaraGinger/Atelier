@@ -12,6 +12,8 @@ namespace Atelier.Logic.Repositories.Interface
 
         List<string> GetFurnitureNames();
 
-        void UpdateFurnitureAmount(double amount, int furnitureId);
+        void UpdateFurnitureAmount(int productId);
+
+        void UpdateFurnitureAmountBySupplierOrder(int supplierOrderId);
     }
 }

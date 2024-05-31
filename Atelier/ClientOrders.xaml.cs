@@ -95,19 +95,6 @@
             DateTime date = Convert.ToDateTime(clientOrder.ExecutionDate);
 
             orderRepository.UpdateExecutionDate(clientOrder.ClientOrderId, date.ToString("yyyy-MM-dd"));
-
-            var product = orderRepository.GetProductById(clientOrder.ProductId);
-
-            var model = modelRepository.GetModelById(product.ModelId);
-
-            var fabric = fabricRepository.GetFabricById(product.FabricId);
-            fabric.Amount -= model.WasteFabric*product.NumberProducts;
-            fabricRepository.UpdateFabricAmount(fabric.Amount, fabric.FabricId);
-
-            var furniture = furnitureRepository.GetFurnitureById(product.FurnitureId);
-            furniture.Amount -= model.NumberFurniture*product.NumberProducts;
-            furnitureRepository.UpdateFurnitureAmount(furniture.Amount, furniture.FurnitureId);
-
         }
 
         private void MenuButton_Click(object sender, RoutedEventArgs e)

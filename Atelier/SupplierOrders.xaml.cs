@@ -52,44 +52,12 @@ namespace Atelier
                 {
                     case ProductType.Fabric:
                         {
-                            var fabric = fabricRepository.GetFabricByName(order.ProductName);
-                            fabric.Amount += order.Amount;
-                            fabricRepository.UpdateFabricAmount(fabric.Amount, fabric.FabricId);
+                            fabricRepository.UpdateFabricAmountBySupplierOrder(order.SupplierOrderId);
                             break;
                         }
                     case ProductType.Furniture:
                         {
-                            var furniture = furnitureRepository.GetFurnitureByName(order.ProductName);
-                            furniture.Amount += (int)order.Amount;
-                            furnitureRepository.UpdateFurnitureAmount(furniture.Amount, furniture.FurnitureId);
-                            break;
-                        }
-                }
-            }
-        }
-
-        private void CompletedCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            var order = OrdersDataGrid.SelectedItem as SupplierOrderHelper;
-
-            if (order != null)
-            {
-                orderRepository.UpdateSupplierIsComplete(order.SupplierOrderId, 0);
-
-                switch (order.ProductType)
-                {
-                    case ProductType.Fabric:
-                        {
-                            var fabric = fabricRepository.GetFabricByName(order.ProductName);
-                            fabric.Amount -= order.Amount;
-                            fabricRepository.UpdateFabricAmount(fabric.Amount, fabric.FabricId);
-                            break;
-                        }
-                    case ProductType.Furniture:
-                        {
-                            var furniture = furnitureRepository.GetFurnitureByName(order.ProductName);
-                            furniture.Amount -= (int)order.Amount;
-                            furnitureRepository.UpdateFurnitureAmount(furniture.Amount, furniture.FurnitureId);
+                            furnitureRepository.UpdateFurnitureAmountBySupplierOrder(order.SupplierOrderId);
                             break;
                         }
                 }

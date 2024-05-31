@@ -27,29 +27,21 @@ namespace Atelier
 
         public void FillCheck(int orderId)
         {
-            var order = _orderRepository.GetOrderById(orderId);
+            var check = _orderRepository.GetCheck(orderId);
 
-            var product = _orderRepository.GetProductById(order.ProductId);
+            ModelTextBlock.Text = check.ModelName;
+            ModelPriceLabel.Content = $"{check.ModelPrice} * {check.NumberProducts} = {check.SumModel}";
 
-            var model = _modelRepository.GetModelById(product.ModelId);
+            FabricTextBlock.Text = check.FabricName;
+            FabricPriceLabel.Content = $"{check.FabricPrice} * {check.WasteFabric} * {check.NumberProducts} = {check.SumFabric}";
 
-            var fabric = _fabricRepository.GetFabricById(product.FabricId);
-
-            var furniture = _furnitureRepository.GetFurnitureById(product.FurnitureId);
-
-            ModelTextBlock.Text = model.Name;
-            ModelPriceLabel.Content = $"{model.Price} * {product.NumberProducts} = {model.Price*product.NumberProducts}";
-
-            FabricTextBlock.Text = fabric.Name;
-            FabricPriceLabel.Content = $"{fabric.Price} * {model.WasteFabric} * {product.NumberProducts} = {fabric.Price* model.WasteFabric* product.NumberProducts}";
-
-            FurnitureTextBlock.Text = furniture.Name;
-            FurniturePriceLabel.Content = $"{furniture.Price} * {model.NumberFurniture} * {product.NumberProducts} = {furniture.Price* model.NumberFurniture* product.NumberProducts}";
+            FurnitureTextBlock.Text = check.FurnitureName;
+            FurniturePriceLabel.Content = $"{check.FurniturePrice} * {check.NumberFurniture} * {check.NumberProducts} = {check.SumFurniture}";
 
             WorkTextBlock.Text = "Ціна роботи";
-            WorkPriceLabel.Content = $"{model.CostOfWork} * {product.NumberProducts}";
+            WorkPriceLabel.Content = $"{check.CostOfWork} * {check.NumberProducts}";
 
-            PriceLabel.Content = $"{product.Price}";
+            PriceLabel.Content = $"{check.Price}";
         }
     }
 }

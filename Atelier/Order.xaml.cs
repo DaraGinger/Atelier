@@ -83,17 +83,17 @@
                 NumberProducts = Convert.ToInt32(CountTextBox.Text)
             };
 
-            Model model = modelRepository.GetModelById(product.ModelId);
-
             int workerId = WorkerComboBox.Text == "" ? 0 : Convert.ToInt32(WorkerComboBox.Text.Substring(0, 1));
 
             var clientOrder = orderRepository.AddOrder(product, LastNameTextBox.Text, NameTextBox.Text, SurnameTextBox.Text, workerId);
 
             ClientOrderId = clientOrder.ClientOrderId;
 
-            UpdateFabric(product.FabricId, model.WasteFabric, workerId);
+            Model model = modelRepository.GetModelById(product.ModelId);
 
-            UpdateFurniture(product.FurnitureId, model.NumberFurniture, workerId);
+            UpdateFabric(product, model.WasteFabric, workerId);
+
+            UpdateFurniture(product, model.NumberFurniture, workerId);
 
             workerRepository.UpdateWorkerNumberOrders(workerId);
 
@@ -102,9 +102,9 @@
             MessageBox.Show("Success!");
         }
 
-        private void UpdateFabric(int fabricId, double wasteFabric, int workerId, int numberProducts)
+        private void UpdateFabric(Product product, double wasteFabric, int workerId)
         {
-            Fabric fabric = fabricRepository.GetFabricById(fabricId);
+            Fabric fabric = fabricRepository.GetFabricById(product.FabricId);
 
             if (fabric.Amount == 0 || fabric.Amount < wasteFabric)
             {
@@ -116,7 +116,7 @@
                     ProductName = fabric.Name,
                     ProductType = ProductType.Fabric,
                     Amount = fabricCount,
-                    Price = fabricCount * fabric.Price * numberProducts,
+                    Price = fabricCount * fabric.Price * product.NumberProducts,
                     WorkerId = workerId,
                     OrderDate = DateTime.Now
                 };
@@ -125,14 +125,13 @@
             }
             else
             {
-                double rest = fabric.Amount - (wasteFabric*numberProducts);
-                fabricRepository.UpdateFabricAmount(rest, fabric.FabricId);
+                fabricRepository.UpdateFabricAmount(product.ProductId);
             }
         }
 
-        private void UpdateFurniture(int furnitureId, int numberFurniture, int workerId, int numberProducts)
+        private void UpdateFurniture(Product product, int numberFurniture, int workerId)
         {
-            Furniture furniture = furnitureRepository.GetFurnitureById(furnitureId);
+            Furniture furniture = furnitureRepository.GetFurnitureById(product.FurnitureId);
 
             if (furniture.Amount == 0 || furniture.Amount < numberFurniture)
             {
@@ -153,8 +152,7 @@
             }
             else
             {
-                double rest = furniture.Amount - numberFurniture;
-                furnitureRepository.UpdateFurnitureAmount(rest, furniture.FurnitureId);
+                furnitureRepository.UpdateFurnitureAmount(product.ProductId);
             }
         }
 
