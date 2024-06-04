@@ -79,7 +79,7 @@
                 WasteClothLabel.Content = model.WasteFabric;
                 FurnitureNameTextBlock.Text = model.FurnitureName;
                 PriceLabel.Content = model.Price + " грн";
-                ClothImage.Source = (ImageSource)new ImageSourceConverter().ConvertFromString(model.ImageSrc);
+                //ClothImage.Source = (ImageSource)new ImageSourceConverter().ConvertFromString(model.ImageSrc);
                 NumberFurnitureLabel.Content = model.NumberFurniture;
             }
         }

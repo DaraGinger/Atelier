@@ -66,7 +66,7 @@
                 AmountLabel.Content = fabric.Amount+" м";
                 WidthLabel.Content = fabric.Width+" м";
                 PriceLabel.Content = fabric.Price+" грн/м";
-                ClothImage.Source = (ImageSource)new ImageSourceConverter().ConvertFromString(fabric.ImageSrc);
+                //ClothImage.Source = (ImageSource)new ImageSourceConverter().ConvertFromString(fabric.ImageSrc);
             }
         }
 

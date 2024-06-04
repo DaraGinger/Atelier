@@ -65,7 +65,7 @@ namespace Atelier
                 AmountLabel.Content = furniture.Amount + " шт";
                 MaterialLabel.Content = furniture.Material;
                 PriceLabel.Content = furniture.Price + " грн/шт";
-                ClothImage.Source = (ImageSource)new ImageSourceConverter().ConvertFromString(furniture.ImageSrc);
+                //ClothImage.Source = (ImageSource)new ImageSourceConverter().ConvertFromString(furniture.ImageSrc);
             }
         }
 
